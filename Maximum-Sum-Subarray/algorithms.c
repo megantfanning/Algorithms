@@ -207,17 +207,18 @@ MSS-DAC (A, low, high)
 // Recursion inversion 
 -- see 17 30 of the lecture
 -- start at the smallest and work up to whole array 
+// this is "adpated" (taken almost literally identically) from  the project1Alg4PC.pdf provided with the Project 1 materials
 MSS-LINEAR (A)
       n = A.length
       max-sum = -∞
       ending-here-sum = -∞
-      for i = 1 to n
-            ending-here-high = i
+      for j = 1 to n
+            ending-here-high = j
             if ending-here-sum > 0
-                  ending-here-sum = ending-here-sum + A[i]
+                  ending-here-sum = ending-here-sum + A[j]
             else
-                  ending-here-low = i
-                  ending-here-sum = A[i]
+                  ending-here-low = j
+                  ending-here-sum = A[j]
             if ending-here-sum > max-sum
                   max-sum = ending-here-sum
                   low = ending-here-low
