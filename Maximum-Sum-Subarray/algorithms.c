@@ -169,6 +169,40 @@ return (start, end, max-sum)
 3) Find the spanning max 
 4) Find the max of those three 
 ? - whats the base case
+	the base case is when the array is of length 1, so the max subarray is the array itself
+
+// these are "adpated" (taken almost literally identically) from CLRS Ch 2
+MSS-DAC-CROSS(A, low, mid, high)
+      left-sum = -∞
+      sum = 0
+      for i = mid downto low
+            sum = sum + A[i]
+      if sum > left-sum
+            left-sum =sum
+            max-left = i
+      right-sum = -∞
+      sum = 0
+      for j = mid + 1 to high
+            sum = sum + A[j]
+            if sum > right-sum
+                  right-sum = sum
+                  max-right = j
+      return (max-left, max-right, left-sum + right-sum)
+      
+MSS-DAC (A, low, high)
+      if high == low
+            return (low, high, A[low])
+      else
+            mid = floor((low + high) / 2)
+            (llow, lhigh, lsum) = MSS-DAC(A, low, mid)
+            (rlow, rhigh, rsum) = MSS-DAC(A, mid + 1, high)
+            (clow, chigh, csum) = MSS-DAC-CROSS(A, low, mid, high)
+            if lsum >= rsum and lsum >= csum
+                  return (llow, lhigh, lsum)
+            elseif rsum >= lsum and rsum >= csum
+                  return (rlow, rhigh, rsum)
+            else return (clow, chigh, csum)
+
 
 // Recursion inversion 
 -- see 17 30 of the lecture
