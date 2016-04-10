@@ -126,6 +126,29 @@ Module Module1
 
 End Module
 	
+
+// Enum pseudocode
+MSS-ENUM (A)
+	n = A.length
+	max-sum = A[0]
+	current-sum = 0
+	start = 0
+	end = 0
+	for i = 0 to n - 1
+		current-sum = A[i]
+		for j = i + 1 to n - 1
+			current-sum = A[i]
+			for k = i + 1 to j
+				current-sum = current-sum + A[k]
+			if current-sum > max-sum
+				max-sum = current-sum
+				start = i
+				end = j
+
+// Better Enum pseudocode
+// (in progress)
+
+
 // DVC 
 1) Find the answer of first half
 2) Find the answer of the second half
