@@ -8,6 +8,8 @@
 // Date: 			04/10/2016
 /* ------------------------------------------------------------------------- */
 
+// delete me, this is just testing git from my tablet - TY
+
 // References
 // Valgrind = http://www.cprogramming.com/debugging/valgrind.html 
 // Compile = http://www.cyberciti.biz/faq/compiling-c-program-and-creating-executable-file/
