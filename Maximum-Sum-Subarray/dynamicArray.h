@@ -6,7 +6,7 @@
 
 
 # ifndef TYPE
-# define TYPE     int 
+# define TYPE     int
 # define TYPE_SIZE sizeof(int)
 # endif
 
