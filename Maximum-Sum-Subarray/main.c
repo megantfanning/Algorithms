@@ -28,7 +28,6 @@
 int main (int argc, const char * argv[]) 
 {
 	// Local declares 
-	clock_t timer; 
 	const char* rawFile;
 	const char* correctFile = "Results.txt";
 	const char* expFile = "Experiment.txt";
@@ -47,7 +46,7 @@ int main (int argc, const char * argv[])
 	// If two args then run the experimental branch 
 	// If three args then run the correctness branch on the
 	// input file provided. The results are dumped to "Results.txt"
-    if(argc == 2)
+    if(argc == 2 && strcmp(argv[1], "Experimental") == 0)
 	{
 		// Call the experimental function 
 		iResults = expData(expFile);
@@ -69,10 +68,7 @@ int main (int argc, const char * argv[])
 		
 		// Get the raw data into arrays 
 		iResults = fileToAr(rawFile, rawData, rawIdx);
-		
-		// Start the clock 
-		timer = clock();
-		
+			
 		// Get the subarrays from the large array and then pass 
 		// to each of the algos and write to file in this loop
 		iStartIdx = 0; 
@@ -183,12 +179,6 @@ int main (int argc, const char * argv[])
 			// Set the start position
 			iStartIdx = iEndIdx + 1;
 		}
-		
-		// Get the running time 
-		timer = clock() - timer;
-		
-		// Print the running time and bounce
-		printf("\n\nWhole program ran in %f seconds\n\n", (float)timer / (float)CLOCKS_PER_SEC);
 		
 		// Delete the dynamic arrays 
 		deleteDynArr(rawData);

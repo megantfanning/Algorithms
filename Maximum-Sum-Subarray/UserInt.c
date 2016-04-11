@@ -82,9 +82,6 @@ int fileToAr(const char *filename, DynArr *rawData, DynArr *rawIdx)
 	int iCurInt; // Connvert file char * to int
 	int iEndArFlag = 0; // Flag for end of array 1 = end 0 = not end
 	
-	// Tell the user whats happening 
-    printf("\nOpening file: %s.\n", filename);
-	
 	// Open the file
 	fileptr = fopen(filename, "r");
 	
