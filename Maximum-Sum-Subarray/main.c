@@ -18,15 +18,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "dynamicArray.h"
 #include "Algos.h"
 #include "UserInt.h"
 
 // Main Entry Point 
-int main (int argc, const char * argv[]) {
-	
+int main (int argc, const char * argv[]) 
+{
 	// Local declares 
-	char *curWord;
 	clock_t timer; 
 	const char* filename;
 	const char* resultsFile = "Results.txt";
@@ -34,15 +34,13 @@ int main (int argc, const char * argv[]) {
 	DynArr *rawIdx; // Dynamic array as defined in dynamicArray.h
 	DynArr *segData; // Segment of data that is reused and passed to each algo
 	FILE *fileptr;
-	int iCounter = 0; // Debug only 
-	int iEndArFlag = 0; // Flag for end of array 1 = end 0 = not end
-	int iCurInt; // Connvert file char * to int
+	int iResults = -99; // Global reusable results indicator
 	int iGlIdx; // Global reusable indexer
 	int iStartIdx; // Starting index 
 	int iEndIdx; // Ending index 
 	int iStartIdx1 = -99; 
 	int iEndIdx1 = -99;
-	int iMaxSum; // Return from algos - summation
+	int iMaxSum = -99; // Return from algos - summation
 
 	// Create a dynamic aray with just a few elements 
 	// This will hold the actual data from the file.
@@ -52,68 +50,32 @@ int main (int argc, const char * argv[]) {
 	// of each array - these are straight indexes 
 	rawIdx = createDynArr(5);
 		
-	// Get the file name to be processed from command line
-	// or else just use a default 
+	// If two args then run the experimental branch 
+	// If three args then run the correctness branch on the
+	// input file provided. The results are dumped to "Results.txt"
     if(argc == 2)
-        filename = argv[1];
-    else
-        filename = "MSS_TestProblems.txt"; 
-
-	// Tell the user whats happening 
-    printf("\nOpening file: %s.\n", filename);
-	
-	// Start the clock 
-	timer = clock();
-
-	// Open the file
-	fileptr = fopen(filename, "r");
-	
-	// Handle bad file open 
-	if (fileptr == NULL)
 	{
-  		fprintf(stderr, "Cannot open %s.\n", filename);
+		printf("Do the experimental stuff.\n");
 		return 0;
+	}
+    else if(argc == 3 && strcmp(argv[1], "Correctness") == 0)
+	{
+		filename = argv[2];
 	}
 	else
 	{
-		// Get the current word
-		curWord = getWord(fileptr, &iEndArFlag);
-
-		// Start reading in the file - the output of this loop is 
-		// the array with the raw data and the array of 
-		// end positions that is to be used to parse out the smaller 
-		// array from within 
-		while(curWord != NULL)
-		{	
-			// Debug counter 
-			iCounter = iCounter + 1;
-			
-			// Convert to integer
-			iCurInt = atoi(curWord);
-			
-			// Add to the dynamic array
-			addDynArr(rawData, iCurInt);
-			
-			// Check to see if at the end and add accordingly
-			if(iEndArFlag == 1)
-				addDynArr(rawIdx, sizeDynArr(rawData) - 1);
-			
-			// Free up the memory 
-			free(curWord);
-				
-			// Reset the flag 
-			iEndArFlag = 0;
-			
-			// Get the current word
-			curWord = getWord(fileptr, &iEndArFlag);
-		}
+		printf("Incorrect number of args. Try again.\n");
+		return 0;
 	}
 
-	// Close the file
-	fclose(fileptr);
-	fileptr = NULL;
+	// Get the raw data into arrays 
+	iResults = fileToAr(filename, rawData, rawIdx);
 	
-	// Pass to each of the algorithms under study 
+	// Start the clock 
+	timer = clock();
+	
+	// Get the subarrays from the large array and then pass 
+	// to each of the algos and write to file in this loop
 	iStartIdx = 0; 
 	for(iGlIdx = 0; iGlIdx < sizeDynArr(rawIdx); iGlIdx++)
 	{
@@ -130,7 +92,8 @@ int main (int argc, const char * argv[]) {
 			addDynArr(segData, getDynArr(rawData, iStartIdx + i));
 		}
 		
-		// Pass to the algos
+		/* ---------------------------------------------------------- */
+		// Pass to the bad enumeration algo 
 		iMaxSum = BadEnum(segData, &iStartIdx1, &iEndIdx1);
 
 		// Open the file again in append mode
@@ -167,7 +130,50 @@ int main (int argc, const char * argv[]) {
 		}
 		
 		// Reset the internal indexes 
-		iStartIdx1 = iEndIdx1 = -99;
+		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
+		
+		// Close the file 
+		fclose(fileptr);
+		
+		/* ---------------------------------------------------------- */
+		// Pass to the GOOD enumeration algo 
+		iMaxSum = GoodEnum(segData, &iStartIdx1, &iEndIdx1);
+
+		// Open the file again in append mode
+		fileptr = fopen(resultsFile, "a");
+		
+		// Handle bad file open 
+		if (fileptr == NULL)
+		{
+			fprintf(stderr, "Cannot open %s.\n", resultsFile);
+			return 0;
+		}
+		else
+		{
+			// Write to the file for the single result set
+			fprintf(fileptr, "GoodEnum\n");
+			for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
+			{
+				if(i == 0)
+				{
+					fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
+				}
+				else if(i == (iEndIdx1 - iStartIdx1))
+				{
+					fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
+				}
+				else
+				{
+					fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+				}
+			}
+			
+			// Add a new line and the sum
+			fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
+		}
+		
+		// Reset the internal indexes 
+		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
 		
 		// Close the file 
 		fclose(fileptr);
@@ -182,11 +188,12 @@ int main (int argc, const char * argv[]) {
 	// Get the running time 
 	timer = clock() - timer;
 	
+	// Print the running time and bounce
+	printf("\n\nWhole program ran in %f seconds\n\n", (float)timer / (float)CLOCKS_PER_SEC);
+	
 	// Delete the dynamic arrays 
 	deleteDynArr(rawData);
 	deleteDynArr(rawIdx);
 	
-	// Print the running time and bounce
-	printf("\n\nWhole program ran in %f seconds\n\n", (float)timer / (float)CLOCKS_PER_SEC);
 	return 0;
 }
