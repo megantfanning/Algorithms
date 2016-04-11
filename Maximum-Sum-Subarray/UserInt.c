@@ -195,7 +195,7 @@ int expData(const char *filename)
 					fprintf(fileptr, "DVC\n");
 					break;
 				case 3:				
-					fprintf(fileptr, "GoodEnum\n");
+					fprintf(fileptr, "Linear\n");
 					break;
 			}
 			
