@@ -217,8 +217,23 @@ int expData(const char *filename)
 					// Get the current time 
 					cStart = clock();
 					
-					// Pass through the algorithm 
-					iResults = BadEnum(randN, &iStart, &iEnd);
+					// Pass through the algorithm based on the value of outer loop
+					iResults = 0;
+					switch(hIdx)
+					{
+						case 0:
+							iResults = BadEnum(randN, &iStart, &iEnd);
+							break;
+						case 1:
+							iResults = GoodEnum(randN, &iStart, &iEnd);
+							break;
+						case 2:
+							iResults = BadEnum(randN, &iStart, &iEnd);
+							break;
+						case 3:				
+							iResults = GoodEnum(randN, &iStart, &iEnd);
+							break;
+					}
 					
 					// Get the time delta 
 					cEnd = clock();
