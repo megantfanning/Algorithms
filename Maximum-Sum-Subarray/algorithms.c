@@ -212,7 +212,7 @@ MSS-LINEAR (A)
       n = A.length
       max-sum = -∞
       ending-here-sum = -∞
-      for j = 1 to n
+      for j = 0 to n - 1 // because this has to be 0-indexed, right?
             ending-here-high = j
             if ending-here-sum > 0
                   ending-here-sum = ending-here-sum + A[j]
