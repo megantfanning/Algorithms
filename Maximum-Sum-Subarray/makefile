@@ -19,3 +19,4 @@ clean:
 cleanall: clean
 	rm prog
 	rm Results.txt
+	rm Experiment.txt

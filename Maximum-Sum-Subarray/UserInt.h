@@ -1,4 +1,9 @@
-/* 	UserInt.h : User interface and other IO. */
+// Project Name: 	CS325 - Project 1
+// File 			Name: UserInt.h
+// Desc: 			User interface and other IO functions.
+// Authors:			Ian Dalrymple, Megan Fanning, Toni York
+// Date: 			04/10/2016
+/* ------------------------------------------------------------------------- */
 #include<math.h>
 #include <assert.h>
 #include <stdio.h>
@@ -14,5 +19,11 @@ char* getWord(FILE *file, int *iFlag);
 // Get word wrapper containing a loop to 
 // repeatedly call getWord and build an array
 int fileToAr(const char *filename, DynArr *raw, DynArr *idx); 
+
+// Create the experimental runtime results for all 
+// algorithms. Each algorithm will be tested with 
+// 10 samples sizes and 10 runs per sample size and the 
+// average calculated from the ten.
+int expData(const char *filename);
 
 #endif

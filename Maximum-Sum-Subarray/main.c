@@ -12,6 +12,7 @@
 // Valgrind = http://www.cprogramming.com/debugging/valgrind.html 
 // Compile = http://www.cyberciti.biz/faq/compiling-c-program-and-creating-executable-file/
 // File IO = http://www.programiz.com/c-programming/c-file-examples
+// Clock time = http://stackoverflow.com/questions/12743063/using-clock-to-measure-execution-time
 
 // Includes 
 #include <assert.h>
@@ -28,8 +29,9 @@ int main (int argc, const char * argv[])
 {
 	// Local declares 
 	clock_t timer; 
-	const char* filename;
-	const char* resultsFile = "Results.txt";
+	const char* rawFile;
+	const char* correctFile = "Results.txt";
+	const char* expFile = "Experiment.txt";
 	DynArr *rawData; // Dynamic array as defined in dynamicArray.h
 	DynArr *rawIdx; // Dynamic array as defined in dynamicArray.h
 	DynArr *segData; // Segment of data that is reused and passed to each algo
@@ -41,6 +43,26 @@ int main (int argc, const char * argv[])
 	int iStartIdx1 = -99; 
 	int iEndIdx1 = -99;
 	int iMaxSum = -99; // Return from algos - summation
+	
+	// If two args then run the experimental branch 
+	// If three args then run the correctness branch on the
+	// input file provided. The results are dumped to "Results.txt"
+    if(argc == 2)
+	{
+		// Call the experimental function 
+		iResults = expData(expFile);
+		
+		return 0;
+	}
+    else if(argc == 3 && strcmp(argv[1], "Correctness") == 0)
+	{
+		rawFile = argv[2];
+	}
+	else
+	{
+		printf("Incorrect number of args. Try again.\n");
+		return 0;
+	}
 
 	// Create a dynamic aray with just a few elements 
 	// This will hold the actual data from the file.
@@ -49,27 +71,9 @@ int main (int argc, const char * argv[])
 	// Create a dyamic array to hold the end positions
 	// of each array - these are straight indexes 
 	rawIdx = createDynArr(5);
-		
-	// If two args then run the experimental branch 
-	// If three args then run the correctness branch on the
-	// input file provided. The results are dumped to "Results.txt"
-    if(argc == 2)
-	{
-		printf("Do the experimental stuff.\n");
-		return 0;
-	}
-    else if(argc == 3 && strcmp(argv[1], "Correctness") == 0)
-	{
-		filename = argv[2];
-	}
-	else
-	{
-		printf("Incorrect number of args. Try again.\n");
-		return 0;
-	}
-
+	
 	// Get the raw data into arrays 
-	iResults = fileToAr(filename, rawData, rawIdx);
+	iResults = fileToAr(rawFile, rawData, rawIdx);
 	
 	// Start the clock 
 	timer = clock();
@@ -97,12 +101,12 @@ int main (int argc, const char * argv[])
 		iMaxSum = BadEnum(segData, &iStartIdx1, &iEndIdx1);
 
 		// Open the file again in append mode
-		fileptr = fopen(resultsFile, "a");
+		fileptr = fopen(correctFile, "a");
 		
 		// Handle bad file open 
 		if (fileptr == NULL)
 		{
-			fprintf(stderr, "Cannot open %s.\n", resultsFile);
+			fprintf(stderr, "Cannot open %s.\n", correctFile);
 			return 0;
 		}
 		else
@@ -140,12 +144,12 @@ int main (int argc, const char * argv[])
 		iMaxSum = GoodEnum(segData, &iStartIdx1, &iEndIdx1);
 
 		// Open the file again in append mode
-		fileptr = fopen(resultsFile, "a");
+		fileptr = fopen(correctFile, "a");
 		
 		// Handle bad file open 
 		if (fileptr == NULL)
 		{
-			fprintf(stderr, "Cannot open %s.\n", resultsFile);
+			fprintf(stderr, "Cannot open %s.\n", correctFile);
 			return 0;
 		}
 		else
