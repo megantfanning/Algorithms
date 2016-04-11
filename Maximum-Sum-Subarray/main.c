@@ -57,148 +57,152 @@ int main (int argc, const char * argv[])
 	}
     else if(argc == 3 && strcmp(argv[1], "Correctness") == 0)
 	{
+		// Define the name of the file to be parsed 
 		rawFile = argv[2];
+			
+		// This will hold the actual data from the file.
+		rawData = createDynArr(5);
+		
+		// Create a dyamic array to hold the end positions
+		// of each array - these are straight indexes 
+		rawIdx = createDynArr(5);
+		
+		// Get the raw data into arrays 
+		iResults = fileToAr(rawFile, rawData, rawIdx);
+		
+		// Start the clock 
+		timer = clock();
+		
+		// Get the subarrays from the large array and then pass 
+		// to each of the algos and write to file in this loop
+		iStartIdx = 0; 
+		for(iGlIdx = 0; iGlIdx < sizeDynArr(rawIdx); iGlIdx++)
+		{
+			// Get the last index 
+			iEndIdx = getDynArr(rawIdx, iGlIdx);
+			
+			// Create a reusable dynamic array
+			segData = createDynArr((iEndIdx - iStartIdx) + 1);
+
+			// Loop to add the elements to the new array 
+			int i = 0;
+			for(i = 0; i < (iEndIdx - iStartIdx) + 1; i++)
+			{
+				addDynArr(segData, getDynArr(rawData, iStartIdx + i));
+			}
+			
+			/* ---------------------------------------------------------- */
+			// Pass to the bad enumeration algo 
+			iMaxSum = BadEnum(segData, &iStartIdx1, &iEndIdx1);
+
+			// Open the file again in append mode
+			fileptr = fopen(correctFile, "a");
+			
+			// Handle bad file open 
+			if (fileptr == NULL)
+			{
+				fprintf(stderr, "Cannot open %s.\n", correctFile);
+				return 0;
+			}
+			else
+			{
+				// Write to the file for the single result set
+				fprintf(fileptr, "BadEnum\n");
+				for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
+				{
+					if(i == 0)
+					{
+						fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
+					}
+					else if(i == (iEndIdx1 - iStartIdx1))
+					{
+						fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
+					}
+					else
+					{
+						fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+					}
+				}
+				
+				// Add a new line and the sum
+				fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
+			}
+			
+			// Reset the internal indexes 
+			iStartIdx1 = iEndIdx1 = iMaxSum = -99;
+			
+			// Close the file 
+			fclose(fileptr);
+			
+			/* ---------------------------------------------------------- */
+			// Pass to the GOOD enumeration algo 
+			iMaxSum = GoodEnum(segData, &iStartIdx1, &iEndIdx1);
+
+			// Open the file again in append mode
+			fileptr = fopen(correctFile, "a");
+			
+			// Handle bad file open 
+			if (fileptr == NULL)
+			{
+				fprintf(stderr, "Cannot open %s.\n", correctFile);
+				return 0;
+			}
+			else
+			{
+				// Write to the file for the single result set
+				fprintf(fileptr, "GoodEnum\n");
+				for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
+				{
+					if(i == 0)
+					{
+						fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
+					}
+					else if(i == (iEndIdx1 - iStartIdx1))
+					{
+						fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
+					}
+					else
+					{
+						fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+					}
+				}
+				
+				// Add a new line and the sum
+				fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
+			}
+			
+			// Reset the internal indexes 
+			iStartIdx1 = iEndIdx1 = iMaxSum = -99;
+			
+			// Close the file 
+			fclose(fileptr);
+			
+			// Clean up the dynamic allocation
+			deleteDynArr(segData);
+			
+			// Set the start position
+			iStartIdx = iEndIdx + 1;
+		}
+		
+		// Get the running time 
+		timer = clock() - timer;
+		
+		// Print the running time and bounce
+		printf("\n\nWhole program ran in %f seconds\n\n", (float)timer / (float)CLOCKS_PER_SEC);
+		
+		// Delete the dynamic arrays 
+		deleteDynArr(rawData);
+		deleteDynArr(rawIdx);
+		
+		// Bounce
+		return 0;
 	}
 	else
 	{
+		// Default case 
 		printf("Incorrect number of args. Try again.\n");
+		
+		// Bounce
 		return 0;
 	}
-
-	// Create a dynamic aray with just a few elements 
-	// This will hold the actual data from the file.
-	rawData = createDynArr(5);
-	
-	// Create a dyamic array to hold the end positions
-	// of each array - these are straight indexes 
-	rawIdx = createDynArr(5);
-	
-	// Get the raw data into arrays 
-	iResults = fileToAr(rawFile, rawData, rawIdx);
-	
-	// Start the clock 
-	timer = clock();
-	
-	// Get the subarrays from the large array and then pass 
-	// to each of the algos and write to file in this loop
-	iStartIdx = 0; 
-	for(iGlIdx = 0; iGlIdx < sizeDynArr(rawIdx); iGlIdx++)
-	{
-		// Get the last index 
-		iEndIdx = getDynArr(rawIdx, iGlIdx);
-		
-		// Create a reusable dynamic array
-		segData = createDynArr((iEndIdx - iStartIdx) + 1);
-
-		// Loop to add the elements to the new array 
-		int i = 0;
-		for(i = 0; i < (iEndIdx - iStartIdx) + 1; i++)
-		{
-			addDynArr(segData, getDynArr(rawData, iStartIdx + i));
-		}
-		
-		/* ---------------------------------------------------------- */
-		// Pass to the bad enumeration algo 
-		iMaxSum = BadEnum(segData, &iStartIdx1, &iEndIdx1);
-
-		// Open the file again in append mode
-		fileptr = fopen(correctFile, "a");
-		
-		// Handle bad file open 
-		if (fileptr == NULL)
-		{
-			fprintf(stderr, "Cannot open %s.\n", correctFile);
-			return 0;
-		}
-		else
-		{
-			// Write to the file for the single result set
-			fprintf(fileptr, "BadEnum\n");
-			for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
-			{
-				if(i == 0)
-				{
-					fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
-				}
-				else if(i == (iEndIdx1 - iStartIdx1))
-				{
-					fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
-				}
-				else
-				{
-					fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
-				}
-			}
-			
-			// Add a new line and the sum
-			fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
-		}
-		
-		// Reset the internal indexes 
-		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
-		
-		// Close the file 
-		fclose(fileptr);
-		
-		/* ---------------------------------------------------------- */
-		// Pass to the GOOD enumeration algo 
-		iMaxSum = GoodEnum(segData, &iStartIdx1, &iEndIdx1);
-
-		// Open the file again in append mode
-		fileptr = fopen(correctFile, "a");
-		
-		// Handle bad file open 
-		if (fileptr == NULL)
-		{
-			fprintf(stderr, "Cannot open %s.\n", correctFile);
-			return 0;
-		}
-		else
-		{
-			// Write to the file for the single result set
-			fprintf(fileptr, "GoodEnum\n");
-			for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
-			{
-				if(i == 0)
-				{
-					fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
-				}
-				else if(i == (iEndIdx1 - iStartIdx1))
-				{
-					fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
-				}
-				else
-				{
-					fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
-				}
-			}
-			
-			// Add a new line and the sum
-			fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
-		}
-		
-		// Reset the internal indexes 
-		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
-		
-		// Close the file 
-		fclose(fileptr);
-		
-		// Clean up the dynamic allocation
-		deleteDynArr(segData);
-		
-		// Set the start position
-		iStartIdx = iEndIdx + 1;
-	}
-	
-	// Get the running time 
-	timer = clock() - timer;
-	
-	// Print the running time and bounce
-	printf("\n\nWhole program ran in %f seconds\n\n", (float)timer / (float)CLOCKS_PER_SEC);
-	
-	// Delete the dynamic arrays 
-	deleteDynArr(rawData);
-	deleteDynArr(rawIdx);
-	
-	return 0;
 }
