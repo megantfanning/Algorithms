@@ -20,6 +20,15 @@ int BadEnum(DynArr *v, int *start, int *end)
 	int j = 0;
 	int k = 0;
 	
+	// Check for one element and return if 
+	// only one long 
+	if(sizeDynArr(v) == 1)
+	{
+		*start = 0;
+		*end = 0;
+		return getDynArr(v, 0);
+	}
+	
 	// Loop through the array - outer loop is start index 
 	for(i = 0; i < sizeDynArr(v); i++)
 	{
@@ -61,6 +70,15 @@ int GoodEnum(DynArr *v, int *start, int *end)
 	int i = 0;
 	int j = 0;
 
+	// Check for one element and return if 
+	// only one long 
+	if(sizeDynArr(v) == 1)
+	{
+		*start = 0;
+		*end = 0;
+		return getDynArr(v, 0);
+	}
+	
 	// Loop through the array - outer loop is start index 
 	for(i = 0; i < sizeDynArr(v); i++)
 	{

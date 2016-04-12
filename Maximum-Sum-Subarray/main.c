@@ -108,21 +108,31 @@ int main (int argc, const char * argv[])
 			}
 			else
 			{
-				// Write to the file for the single result set
+				// Write the name of the algo 
 				fprintf(fileptr, "BadEnum\n");
-				for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
+				
+				// Write the results to the file handling the 
+				// case of only one data point in the input set
+				if(iStartIdx1 == 0 && iEndIdx1 == 0)
 				{
-					if(i == 0)
+					fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
+				}
+				else 
+				{
+					for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
 					{
-						fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
-					}
-					else if(i == (iEndIdx1 - iStartIdx1))
-					{
-						fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
-					}
-					else
-					{
-						fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+						if(i == 0)
+						{
+							fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
+						}
+						else if(i == (iEndIdx1 - iStartIdx1))
+						{
+							fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
+						}
+						else
+						{
+							fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+						}
 					}
 				}
 				
@@ -151,21 +161,31 @@ int main (int argc, const char * argv[])
 			}
 			else
 			{
-				// Write to the file for the single result set
+				// Write the name of the algo
 				fprintf(fileptr, "GoodEnum\n");
-				for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
+				
+				// Write the results to the file handling the 
+				// case of only one data point in the input set
+				if(iStartIdx1 == 0 && iEndIdx1 == 0)
 				{
-					if(i == 0)
+					fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
+				}
+				else 
+				{
+					for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
 					{
-						fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
-					}
-					else if(i == (iEndIdx1 - iStartIdx1))
-					{
-						fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
-					}
-					else
-					{
-						fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+						if(i == 0)
+						{
+							fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
+						}
+						else if(i == (iEndIdx1 - iStartIdx1))
+						{
+							fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
+						}
+						else
+						{
+							fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+						}
 					}
 				}
 				
