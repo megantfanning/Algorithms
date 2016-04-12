@@ -29,8 +29,7 @@ int main (int argc, const char * argv[])
 {
 	// Local declares 
 	const char* rawFile;
-	const char* correctFile = "Results.txt";
-	const char* expFile = "Experiment.txt";
+	char bufFile[512];
 	DynArr *rawData; // Dynamic array as defined in dynamicArray.h
 	DynArr *rawIdx; // Dynamic array as defined in dynamicArray.h
 	DynArr *segData; // Segment of data that is reused and passed to each algo
@@ -42,23 +41,30 @@ int main (int argc, const char * argv[])
 	int iStartIdx1 = -99; 
 	int iEndIdx1 = -99;
 	int iMaxSum = -99; // Return from algos - summation
-	
+	int iEpoch = (int)time(NULL); // Seconds since epoch 
+
 	// If two args then run the experimental branch 
 	// If three args then run the correctness branch on the
 	// input file provided. The results are dumped to "Results.txt"
     if(argc == 2 && strcmp(argv[1], "Experimental") == 0)
 	{
+		// Create the name of the exp results file 
+		snprintf(bufFile, sizeof bufFile, "%s%d%s", "Exp", iEpoch, ".txt");
+		
 		// Call the experimental function 
-		iResults = expData(expFile);
+		iResults = expData(bufFile);
 		
 		// Bounce
 		return 0;
 	}
     else if(argc == 3 && strcmp(argv[1], "Correctness") == 0)
 	{
+		// Create the name of the correctness results file 
+		snprintf(bufFile, sizeof bufFile, "%s%d%s", "Results", iEpoch, ".txt");
+		
 		// Define the name of the file to be parsed 
 		rawFile = argv[2];
-			
+		
 		// This will hold the actual data from the file.
 		rawData = createDynArr(5);
 		
@@ -92,12 +98,12 @@ int main (int argc, const char * argv[])
 			iMaxSum = BadEnum(segData, &iStartIdx1, &iEndIdx1);
 
 			// Open the file again in append mode
-			fileptr = fopen(correctFile, "a");
+			fileptr = fopen(bufFile, "a");
 			
 			// Handle bad file open 
 			if (fileptr == NULL)
 			{
-				fprintf(stderr, "Cannot open %s.\n", correctFile);
+				fprintf(stderr, "Cannot open %s.\n", bufFile);
 				return 0;
 			}
 			else
@@ -135,12 +141,12 @@ int main (int argc, const char * argv[])
 			iMaxSum = GoodEnum(segData, &iStartIdx1, &iEndIdx1);
 
 			// Open the file again in append mode
-			fileptr = fopen(correctFile, "a");
+			fileptr = fopen(bufFile, "a");
 			
 			// Handle bad file open 
 			if (fileptr == NULL)
 			{
-				fprintf(stderr, "Cannot open %s.\n", correctFile);
+				fprintf(stderr, "Cannot open %s.\n", bufFile);
 				return 0;
 			}
 			else
