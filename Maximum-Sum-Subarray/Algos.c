@@ -104,3 +104,46 @@ int GoodEnum(DynArr *v, int *start, int *end)
 	
 	return iMaxSum;
 }
+
+
+//The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
+//TODO this function returns multiple things need to return array
+int MSS-DAC (A[],int low,int high){
+      if high == low
+            return (low, high, A[low])
+      else
+            mid = floor((low + high) / 2)
+            (llow, lhigh, lsum) = MSS-DAC(A, low, mid)
+            (rlow, rhigh, rsum) = MSS-DAC(A, mid + 1, high)
+            (clow, chigh, csum) = MSS-DAC-CROSS(A, low, mid, high)
+            if lsum ≥ rsum and lsum ≥ csum
+                  return (llow, lhigh, lsum)
+            elseif rsum ≥ lsum and rsum ≥ csum
+                  return (rlow, rhigh, rsum)
+            else return (clow, chigh, csum)
+}
+
+//The recursive MSS-DAC algorithm checks for the base case, then makes two recursive calls on subproblems,
+// then one call to the helper subroutine MASS-DAC-CROSS, and finally it does a series of comparisons to return the maximum. 
+
+int DivideAndConquer(){
+
+      MSS-DAC-CROSS(A, low, mid, high)
+      left-sum = -∞
+      sum = 0
+      for i = mid downto low
+            sum = sum + A[i]
+      if sum > left-sum
+            left-sum =sum
+            max-left = i
+      right-sum = -∞
+      sum = 0
+      for j = mid + 1 to high
+            sum = sum + A[j]
+            if sum > right-sum
+                  right-sum = sum
+                  max-right = j
+      return (max-left, max-right, left-sum + right-sum)
+}
+
+
