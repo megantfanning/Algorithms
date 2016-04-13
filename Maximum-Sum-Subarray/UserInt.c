@@ -131,6 +131,156 @@ int fileToAr(const char *filename, DynArr *rawData, DynArr *rawIdx)
 	return 1;
 }
 
+// Pass the rawData and rawIdx arrays with a file name into function
+// that will parse out the child arrays and run through each algorithm 
+// and write the results to the file name listed 
+int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile)
+{
+	// Local declares 
+	DynArr *segData; // Segment of data that is reused and passed to each algo
+	FILE *fileptr;
+	int iStartIdx; // Starting index 
+	int iGlIdx; // Global reusable indexer
+	int iEndIdx; // Ending index
+	int iStartIdx1 = -99; 
+	int iEndIdx1 = -99;
+	int iMaxSum = -99; // Return from algos - summation
+	
+	// Get the subarrays from the large array and then pass 
+	// to each of the algos and write to file in this loop
+	iStartIdx = 0; 
+	for(iGlIdx = 0; iGlIdx < sizeDynArr(rawIdx); iGlIdx++)
+	{
+		// Get the last index 
+		iEndIdx = getDynArr(rawIdx, iGlIdx);
+		
+		// Create a reusable dynamic array
+		segData = createDynArr((iEndIdx - iStartIdx) + 1);
+
+		// Loop to add the elements to the new array 
+		int i = 0;
+		for(i = 0; i < (iEndIdx - iStartIdx) + 1; i++)
+		{
+			addDynArr(segData, getDynArr(rawData, iStartIdx + i));
+		}
+		
+		/* ---------------------------------------------------------- */
+		// Pass to the bad enumeration algo 
+		iMaxSum = BadEnum(segData, &iStartIdx1, &iEndIdx1);
+
+		// Open the file again in append mode
+		fileptr = fopen(bufFile, "a");
+		
+		// Handle bad file open 
+		if (fileptr == NULL)
+		{
+			fprintf(stderr, "Cannot open %s.\n", bufFile);
+			return -99;
+		}
+		else
+		{
+			// Write the name of the algo 
+			fprintf(fileptr, "BadEnum\n");
+			
+			// Write the results to the file handling the 
+			// case of only one data point in the input set
+			if(iStartIdx1 == 0 && iEndIdx1 == 0)
+			{
+				fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
+			}
+			else 
+			{
+				for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
+				{
+					if(i == 0)
+					{
+						fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
+					}
+					else if(i == (iEndIdx1 - iStartIdx1))
+					{
+						fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
+					}
+					else
+					{
+						fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+					}
+				}
+			}
+			
+			// Add a new line and the sum
+			fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
+		}
+		
+		// Reset the internal indexes 
+		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
+		
+		// Close the file 
+		fclose(fileptr);
+		
+		/* ---------------------------------------------------------- */
+		// Pass to the GOOD enumeration algo 
+		iMaxSum = GoodEnum(segData, &iStartIdx1, &iEndIdx1);
+
+		// Open the file again in append mode
+		fileptr = fopen(bufFile, "a");
+		
+		// Handle bad file open 
+		if (fileptr == NULL)
+		{
+			fprintf(stderr, "Cannot open %s.\n", bufFile);
+			return -99;
+		}
+		else
+		{
+			// Write the name of the algo
+			fprintf(fileptr, "GoodEnum\n");
+			
+			// Write the results to the file handling the 
+			// case of only one data point in the input set
+			if(iStartIdx1 == 0 && iEndIdx1 == 0)
+			{
+				fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
+			}
+			else 
+			{
+				for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
+				{
+					if(i == 0)
+					{
+						fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
+					}
+					else if(i == (iEndIdx1 - iStartIdx1))
+					{
+						fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
+					}
+					else
+					{
+						fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
+					}
+				}
+			}
+			
+			// Add a new line and the sum
+			fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
+		}
+		
+		// Reset the internal indexes 
+		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
+		
+		// Close the file 
+		fclose(fileptr);
+		
+		// Clean up the dynamic allocation
+		deleteDynArr(segData);
+		
+		// Set the start position
+		iStartIdx = iEndIdx + 1;
+	}
+	
+	// Bounce from the routine 
+	return 1;
+}
+
 // Create the experimental runtime results for all 
 // algorithms. Each algorithm will be tested with 
 // 10 samples sizes and 10 runs per sample size and the 
@@ -172,7 +322,7 @@ int expData(const char *filename)
 	if (fileptr == NULL)
 	{
 		fprintf(stderr, "Cannot open %s.\n", filename);
-		return 0;
+		return -99;
 	}
 	else
 	{
@@ -231,7 +381,7 @@ int expData(const char *filename)
 							iResults = GoodEnum(randN, &iStart, &iEnd);
 							break;
 					}
-					
+								
 					// Get the time delta 
 					cEnd = clock();
 					dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
@@ -257,7 +407,7 @@ int expData(const char *filename)
 	fclose(fileptr);
 	
 	// Bounce
-	return -99;
+	return 1;
 }
 
 
