@@ -105,45 +105,58 @@ int GoodEnum(DynArr *v, int *start, int *end)
 	return iMaxSum;
 }
 
+struct tuple{
+    int low;
+    int high;
+    int sum;
+}
 
 //The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
-//TODO this function returns multiple things need to return array
-int MSS-DAC (A[],int low,int high){
-      if high == low
-            return (low, high, A[low])
-      else
-            mid = floor((low + high) / 2)
-            (llow, lhigh, lsum) = MSS-DAC(A, low, mid)
-            (rlow, rhigh, rsum) = MSS-DAC(A, mid + 1, high)
-            (clow, chigh, csum) = MSS-DAC-CROSS(A, low, mid, high)
-            if lsum ≥ rsum and lsum ≥ csum
-                  return (llow, lhigh, lsum)
-            elseif rsum ≥ lsum and rsum ≥ csum
-                  return (rlow, rhigh, rsum)
-            else return (clow, chigh, csum)
+//TODO fix return
+int MSS_DAC (int A[],int low,int high){
+    if(high == low){
+        return (low, high, A[low]);//TODO
+    }else{
+        int mid = floor((low + high) / 2);
+        int llow,rlow,rhigh,rsum,clow,chigh,csum,lhigh,lsum;//TODO define
+        //tuple (llow, lhigh, lsum) = MSS_DAC(A, low, mid); 
+        //tuple (rlow, rhigh, rsum) = MSS_DAC(A, mid + 1, high);
+        //tuple (clow, chigh, csum) = MSS_DAC_CROSS(A, low, mid, high);
+        if(lsum >= rsum && lsum >= csum){
+            return (llow, lhigh, lsum);
+        }else if(rsum >= lsum && rsum >= csum){
+            return (rlow, rhigh, rsum);
+        }else{
+            return (clow, chigh, csum);//TODO
+        }
+    }
 }
 
 //The recursive MSS-DAC algorithm checks for the base case, then makes two recursive calls on subproblems,
 // then one call to the helper subroutine MASS-DAC-CROSS, and finally it does a series of comparisons to return the maximum. 
 
-int DivideAndConquer(){
+int MSS_DAC_CROSS(int A[],int low,int mid,int high){
+    //left-sum = -∞
+    int sum = 0;
+    int left,right,max;//TODO define
+    for (int i = mid;i< low; i--){
+        sum = sum + A[i];
+        
+        if(sum > left-sum){
+            sum=left-sum;
+            i= max-left;
+        }
+    }
+    //right-sum = -∞
+    sum = 0;
 
-      MSS-DAC-CROSS(A, low, mid, high)
-      left-sum = -∞
-      sum = 0
-      for i = mid downto low
-            sum = sum + A[i]
-      if sum > left-sum
-            left-sum =sum
-            max-left = i
-      right-sum = -∞
-      sum = 0
-      for j = mid + 1 to high
-            sum = sum + A[j]
-            if sum > right-sum
-                  right-sum = sum
-                  max-right = j
-      return (max-left, max-right, left-sum + right-sum)
+    for (int j = mid + 1; j < high; j++){
+        sum = sum + A[j];
+        if (sum > right-sum){
+            sum=right-sum;
+            j=max-right;
+        }
+    }
+    return (max-left, max-right, left-sum + right-sum);//TODO
 }
-
 
