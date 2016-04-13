@@ -105,29 +105,35 @@ int GoodEnum(DynArr *v, int *start, int *end)
 	return iMaxSum;
 }
 
-struct tuple{
-    int low;
-    int high;
-    int sum;
-}
 
 //The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
 //TODO fix return
-int MSS_DAC (int A[],int low,int high){
+struct Tuple *MSS_DAC (int A[],int low,int high){
     if(high == low){
-        return (low, high, A[low]);//TODO
+        int temp=A[low];
+        struct Tuple equal(low, high,temp);
+        return equal;
     }else{
         int mid = floor((low + high) / 2);
         int llow,rlow,rhigh,rsum,clow,chigh,csum,lhigh,lsum;//TODO define
-        //tuple (llow, lhigh, lsum) = MSS_DAC(A, low, mid); 
-        //tuple (rlow, rhigh, rsum) = MSS_DAC(A, mid + 1, high);
-        //tuple (clow, chigh, csum) = MSS_DAC_CROSS(A, low, mid, high);
+        struct Tuple lTuple,rTuple,cTuple;
+        
+        //(llow, lhigh, lsum);// = MSS_DAC(A, low, mid); 
+        lTuple* =MSS_DAC(A,low,mid);
+        //(rlow, rhigh, rsum) = MSS_DAC(A, mid + 1, high);
+        rTuple* =MSS_DAC(A, mid+1, high);
+        // (clow, chigh, csum) = MSS_DAC_CROSS(A, low, mid, high);
+        cTuple* =MSS_DAC_CROSS(A,low,mid,high);
+
         if(lsum >= rsum && lsum >= csum){
             return (llow, lhigh, lsum);
         }else if(rsum >= lsum && rsum >= csum){
-            return (rlow, rhigh, rsum);
+            struct Tuple rightResults;
+            struct Tuple rightResults(rlow, rhigh, rsum);
+            return rightResults;
         }else{
-            return (clow, chigh, csum);//TODO
+            struct Tuple other(clow, chigh, csum);
+            return other;
         }
     }
 }
