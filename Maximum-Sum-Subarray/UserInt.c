@@ -294,10 +294,10 @@ int expData(const char *filename)
 	DynArr *randN; // Array of random integers based on the sample sizes required
 	FILE *fileptr;
 	int sampleSizes[4][10] = 	{
-									{200, 300, 400, 500, 600, 700,  800, 900, 1000, 1100}, // Bad enum
-									{100, 200, 300, 400, 500, 600,  700, 800, 900, 1000},  // Good enum
-									{100, 200, 300, 400, 500, 600,  700, 800, 900, 1000},  // DVC
-									{100, 200, 300, 400, 500, 600,  700, 800, 900, 1000}   // Linear
+									{200, 300, 400, 500, 600, 700,  800, 900, 1000, 1100}, 			// Bad enum
+									{200, 500, 800, 1100, 1400, 1700, 2000, 2300, 2600, 2900},  	// Good enum
+									{100, 200, 300, 400, 500, 600,  700, 800, 900, 1000},  			// DVC
+									{100, 200, 300, 400, 500, 600,  700, 800, 900, 1000}  			// Linear
 								};
 	// int badEnumSamples[10] = {200, 300, 400, 500, 600, 700,  800, 900, 1000, 1100};
 	//int badEnumSamples[10] = {20, 300, 40, 50, 60, 70,  80, 90, 100, 110}; - Valgrind tester
@@ -358,7 +358,7 @@ int expData(const char *filename)
 					// Assign random numbers to the array
 					for(kIdx = 0; kIdx < sampleSizes[hIdx][iIdx]; kIdx++)
 					{
-						addDynArr(randN, rand() % 1000);
+						addDynArr(randN, (rand() % 1000) - 500);
 					}
 					
 					// Get the current time 
