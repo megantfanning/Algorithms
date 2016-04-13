@@ -20,6 +20,11 @@ char* getWord(FILE *file, int *iFlag);
 // repeatedly call getWord and build an array
 int fileToAr(const char *filename, DynArr *raw, DynArr *idx); 
 
+// Pass the rawData and rawIdx arrays with a file name into function
+// that will parse out the child arrays and run through each algorithm 
+// and write the results to the file name listed
+int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile);
+
 // Create the experimental runtime results for all 
 // algorithms. Each algorithm will be tested with 
 // 10 samples sizes and 10 runs per sample size and the 
