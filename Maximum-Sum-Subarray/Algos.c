@@ -108,7 +108,6 @@ int GoodEnum(DynArr *v, int *start, int *end)
 
 //The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
 struct Tuple MSS_DAC (int A[],int low,int high){
-    //int llow,rlow,rhigh,rsum,clow,chigh,csum,lhigh,lsum;//TODO define
     struct Tuple lTuple,rTuple,cTuple;
 
     if(high == low){
@@ -139,18 +138,18 @@ struct Tuple MSS_DAC (int A[],int low,int high){
 
 struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high){
     //left-sum = -∞
-    int sum = 0;
+    //int sum = 0;
     int left,right,max;//TODO define
     for (int i = mid;i< low; i--){
         sum = sum + A[i];
         
         if(sum > left-sum){
             sum=left-sum;
-            i= max-left;
+            i= max-left;//how is max defined?
         }
     }
     //right-sum = -∞
-    sum = 0;
+    //sum = 0;
 
     for (int j = mid + 1; j < high; j++){
         sum = sum + A[j];
@@ -162,4 +161,6 @@ struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high){
     struct Tuple maxTuple={max-left, max-right, left-sum + right-sum};
     return maxTuple;
 }
+
+
 
