@@ -108,32 +108,28 @@ int GoodEnum(DynArr *v, int *start, int *end)
 
 //The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
 //TODO fix return
-struct Tuple *MSS_DAC (int A[],int low,int high){
+struct Tuple MSS_DAC (int A[],int low,int high){
+    int llow,rlow,rhigh,rsum,clow,chigh,csum,lhigh,lsum;//TODO define
     if(high == low){
         int temp=A[low];
-        struct Tuple equal(low, high,temp);
+        struct Tuple equal={low, high,temp};
         return equal;
     }else{
         int mid = floor((low + high) / 2);
-        int llow,rlow,rhigh,rsum,clow,chigh,csum,lhigh,lsum;//TODO define
         struct Tuple lTuple,rTuple,cTuple;
-        
-        //(llow, lhigh, lsum);// = MSS_DAC(A, low, mid); 
-        lTuple* =MSS_DAC(A,low,mid);
-        //(rlow, rhigh, rsum) = MSS_DAC(A, mid + 1, high);
-        rTuple* =MSS_DAC(A, mid+1, high);
-        // (clow, chigh, csum) = MSS_DAC_CROSS(A, low, mid, high);
-        cTuple* =MSS_DAC_CROSS(A,low,mid,high);
+        lTuple =MSS_DAC(A,low,mid);
+        rTuple =MSS_DAC(A, mid+1, high);
+        cTuple =MSS_DAC_CROSS(A,low,mid,high);
 
         if(lsum >= rsum && lsum >= csum){
-            return (llow, lhigh, lsum);
+            struct Tuple lTuple={llow,lhigh,lsum};
+            return lTuple;
         }else if(rsum >= lsum && rsum >= csum){
-            struct Tuple rightResults;
-            struct Tuple rightResults(rlow, rhigh, rsum);
+            struct Tuple rightResults={rlow, rhigh, rsum};
             return rightResults;
         }else{
-            struct Tuple other(clow, chigh, csum);
-            return other;
+            struct Tuple cTuple={clow, chigh, csum};
+            return cTuple;
         }
     }
 }
@@ -141,7 +137,7 @@ struct Tuple *MSS_DAC (int A[],int low,int high){
 //The recursive MSS-DAC algorithm checks for the base case, then makes two recursive calls on subproblems,
 // then one call to the helper subroutine MASS-DAC-CROSS, and finally it does a series of comparisons to return the maximum. 
 
-int MSS_DAC_CROSS(int A[],int low,int mid,int high){
+struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high){
     //left-sum = -∞
     int sum = 0;
     int left,right,max;//TODO define
@@ -163,6 +159,7 @@ int MSS_DAC_CROSS(int A[],int low,int mid,int high){
             j=max-right;
         }
     }
-    return (max-left, max-right, left-sum + right-sum);//TODO
+    struct Tuple maxTuple={max-left, max-right, left-sum + right-sum};
+    return maxTuple;
 }
 
