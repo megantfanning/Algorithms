@@ -60,7 +60,8 @@ int main (int argc, const char * argv[])
 	// If three args then run the correctness branch on the
 	// input file provided. The results are dumped to "Results.txt"
     if(argc == 2 && strcmp(argv[1], "Experimental") == 0)
-	{		
+	{	
+        printf("Running Experimental Test results will be saved to Exp.txt \n");	
 		// Create the name of the exp results file 
 		snprintf(bufFile, sizeof bufFile, "%s%d%s", "Exp", iEpoch, ".txt");
 		
@@ -79,6 +80,7 @@ int main (int argc, const char * argv[])
 	}
     else if(argc == 3 && strcmp(argv[1], "Correctness") == 0)
 	{
+        printf("Running Correctness Test results will be saved to Results.txt\n");
 		// Create the name of the correctness results file 
 		snprintf(bufFile, sizeof bufFile, "%s%d%s", "Results", iEpoch, ".txt");
 		
