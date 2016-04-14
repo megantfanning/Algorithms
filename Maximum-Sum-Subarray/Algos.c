@@ -106,6 +106,7 @@ int GoodEnum(DynArr *v, int *start, int *end)
 	return iMaxSum;
 }
 
+<<<<<<< HEAD
 // The recursive MSS-DAC algorithm checks for the base case, 
 // then makes two recursive calls on subproblems, then one 
 // call to the helper subroutine MASS-DAC-CROSS, and finally 
@@ -149,6 +150,31 @@ struct Tuple MSS_DAC (int A[],int low,int high)
 		else
 		{
             // struct Tuple cTuple = {clow, chigh, csum};
+=======
+
+//The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
+struct Tuple MSS_DAC (int A[],int low,int high){
+    struct Tuple lTuple,rTuple,cTuple;
+
+    if(high == low){
+        int temp=A[low];
+        struct Tuple equal={low, high,temp};
+        return equal;
+    }else{
+        int mid = floor((low + high) / 2);
+        lTuple =MSS_DAC(A,low,mid);
+        rTuple =MSS_DAC(A, mid+1, high);
+        cTuple =MSS_DAC_CROSS(A,low,mid,high);
+
+        if(lTuple.sum >= rTuple.sum && lTuple.sum >= cTuple.sum){
+            //struct Tuple lTuple={llow,lhigh,lsum};
+            return lTuple;
+        }else if(rTuple.sum >= lTuple.sum && rTuple.sum >= cTuple.sum){
+            //struct Tuple rightResults={rlow, rhigh, rsum};
+            return rTuple;
+        }else{
+            //struct Tuple cTuple={clow, chigh, csum};
+>>>>>>> 390f0187b1d21a18de185a8b4c803a21fe9039b9
             return cTuple;
         }
     }
@@ -159,6 +185,7 @@ struct Tuple MSS_DAC (int A[],int low,int high)
 struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high)
 {
     int sum = 0;
+<<<<<<< HEAD
 	int left_sum = -9999;
 	int max_right = -999;
 	int max_left = -999;
@@ -176,10 +203,24 @@ struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high)
 
     sum = 0;
 	int right_sum = -9999;
+=======
+    int leftSum,rightSum,maxSum;//TODO define
+    for (int i = mid; i< low; i--){
+        int sum = sum + A[i];
+        
+        if(sum > leftSum){
+            sum=leftSum;
+            i= maxLeft;//how is max defined?
+        }
+    }
+    //right-sum = -∞
+    //sum = 0;
+>>>>>>> 390f0187b1d21a18de185a8b4c803a21fe9039b9
 
     for (int j = mid + 1; j < high; j++)
 	{
         sum = sum + A[j];
+<<<<<<< HEAD
         if (sum > right_sum)
 		{
             right_sum = sum;
@@ -189,3 +230,38 @@ struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high)
     struct Tuple maxTuple = {max_left, max_right, left_sum + right_sum};
     return maxTuple;
 }
+=======
+        if (sum > rightSum){
+            sum=rightSum;
+            j=maxRight;
+        }
+    }
+    struct Tuple maxTuple={maxLeft, maxRight, leftSum + rightSum};
+    return maxTuple;
+}
+
+
+struct Tuple MSS_LINEAR (int A[]){
+    int endingHereHigh,endingHereSum,endingHereLow;
+    int n = sizeof(A)/sizeof(int);//A.length
+    
+    //max-sum = -∞
+    //ending-here-sum = -∞
+    for (int j = 0; j <= n-1; j++){
+        endingHereHigh = j;
+        if (endingHereSum > 0){
+            endingHereSum = endingHereSum + A[j];
+        }else{
+            int endingHereLow = j;
+            endingHereSum = A[j];
+        }
+        if (endingHereSum > maxSum){
+            int maxSum = endingHereSum;
+            int low = endingHereLow;
+            int high = endingHereHigh;
+        }
+    }
+    struct Tuple maxTuple={low, high, max-sum};
+    return maxTuple;
+}
+>>>>>>> 390f0187b1d21a18de185a8b4c803a21fe9039b9
