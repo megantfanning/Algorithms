@@ -108,18 +108,22 @@ int GoodEnum(DynArr *v, int *start, int *end)
 
 //TODO insert DAC and DAC_cross here
 
-struct Tuple MSS_LINEAR (int A[]){
+// COMMENTS = TODO
+struct Tuple lTime(DynArr *v)
+{
+	// Local declares 
     int low,high,ending_here_low;
-    int n = sizeof(A)/sizeof(int); //A.length
+    int n = sizeDynArr(v); //A.length
     int max_sum = INT_MIN;//-∞
     int ending_here_sum = INT_MIN;//-∞
-    for (int j = 0; j< n-1;j++){
+	
+    for (int j = 0; j < n; j++){
         int ending_here_high = j;
         if (ending_here_sum > 0){
-            ending_here_sum = ending_here_sum + A[j];
+            ending_here_sum = ending_here_sum + getDynArr(v, j); //A[j]; 
         }else{
             ending_here_low = j;
-            ending_here_sum = A[j];
+            ending_here_sum = getDynArr(v, j); // A[j];
         }
         if (ending_here_sum > max_sum){
             max_sum = ending_here_sum;
@@ -130,3 +134,4 @@ struct Tuple MSS_LINEAR (int A[]){
     struct Tuple maxTuple={low,high,max_sum};
     return maxTuple;
 }
+

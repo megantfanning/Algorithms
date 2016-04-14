@@ -11,6 +11,7 @@
 #ifndef ALGOS_INCLUDED
 #define ALGOS_INCLUDED 1
 #define INT_MIN (-2147483647 - 1)
+
 //define tuple struct
 struct Tuple{
     int low;
@@ -20,11 +21,13 @@ struct Tuple{
 
 // Enumeration algorithms which receive the 
 // start and finish ref parameters and pass 
-// back the sum. 
+// back the sum. The recursive algorithms will
+// utilize a struct to pass back the sum and start
+// and end points.
 int BadEnum(DynArr *v, int * start, int *end);
 int GoodEnum(DynArr *v, int *start, int *end);
 struct Tuple MSS_DAC (int A[],int low,int high);
 struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high);
-int lTime(DynArr *v, int *start, int *end);
+struct Tuple lTime(DynArr *v);
 
 #endif

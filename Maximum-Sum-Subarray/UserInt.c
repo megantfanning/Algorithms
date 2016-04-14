@@ -145,6 +145,7 @@ int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile)
 	int iStartIdx1 = -99; 
 	int iEndIdx1 = -99;
 	int iMaxSum = -99; // Return from algos - summation
+	struct Tuple tResults; // Tuple of results from the recursive algos 
 	
 	// Get the subarrays from the large array and then pass 
 	// to each of the algos and write to file in this loop
@@ -269,7 +270,63 @@ int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile)
 		
 		// Close the file 
 		fclose(fileptr);
+
+		/* ---------------------------------------------------------- */
+		// Pass to the linear time recurive algo 
+		tResults = lTime(segData);
+
+		// Open the file again in append mode
+		fileptr = fopen(bufFile, "a");
 		
+		// Handle bad file open 
+		if (fileptr == NULL)
+		{
+			fprintf(stderr, "Cannot open %s.\n", bufFile);
+			return -99;
+		}
+		else
+		{
+			// Write the name of the algo
+			fprintf(fileptr, "LinearTime\n");
+			
+			// Write the results to the file handling the 
+			// case of only one data point in the input set
+			if(tResults.low == 0 && tResults.high == 0)
+			{
+				fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
+			}
+			else 
+			{
+				for(i = 0; i < (tResults.high - tResults.low) + 1; i++)
+				{
+					if(i == 0)
+					{
+						fprintf(fileptr, "[%d, ", getDynArr(segData, (tResults.low + i)));
+					}
+					else if(i == (tResults.high - tResults.low))
+					{
+						fprintf(fileptr, "%d]", getDynArr(segData, (tResults.low + i)));
+					}
+					else
+					{
+						fprintf(fileptr, "%d, ", getDynArr(segData, (tResults.low + i)));
+					}
+				}
+			}
+			
+			// Add a new line and the sum
+			fprintf(fileptr, "\nSum: %d\n\n", tResults.sum);
+		}
+		
+		// Reset the internal indexes 
+		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
+		
+		// Reset the tuple 
+		tResults.low = tResults.high = tResults.sum = -99;
+		
+		// Close the file 
+		fclose(fileptr);		
+
 		// Clean up the dynamic allocation
 		deleteDynArr(segData);
 		
@@ -311,6 +368,7 @@ int expData(const char *filename)
 	int iResults = -99; // Shared results 
 	int iStart = -99; // Start passed as ref to algos 
 	int iEnd = -99; // End passed as ref to algos 
+	struct Tuple tResults; // Tuple to hold the results of recursive calls
 	
 	// Plant the random number generator seed 
 	srand(time(NULL));
@@ -378,7 +436,7 @@ int expData(const char *filename)
 							iResults = BadEnum(randN, &iStart, &iEnd);
 							break;
 						case 3:				
-							iResults = GoodEnum(randN, &iStart, &iEnd);
+							tResults = lTime(randN);
 							break;
 					}
 								

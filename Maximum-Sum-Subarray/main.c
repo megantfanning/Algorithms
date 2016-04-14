@@ -35,6 +35,26 @@ int main (int argc, const char * argv[])
 	int iResults = -99; // Global reusable results indicator
 	int iEpoch = (int)time(NULL); // Seconds since epoch 
 
+	// DynArr *tester;
+	// // [10, -11, -1, -9, 33, -45, 23, 24, -1, -7, -8, 19] 
+	// tester = createDynArr(9);
+	// addDynArr(tester, 10);
+	// addDynArr(tester, -11);
+	// addDynArr(tester, -1);	
+	// addDynArr(tester, -9);
+	// addDynArr(tester, 33);
+	// addDynArr(tester, -45);	
+	// addDynArr(tester, 23);
+	// addDynArr(tester, 24);
+	// addDynArr(tester, -1);
+	// addDynArr(tester, -7);
+	// addDynArr(tester, -8);
+	// addDynArr(tester, 19);
+	
+	// struct Tuple ianTuple = lTime(tester);
+	// printf("%d %d %d ", ianTuple.low, ianTuple.high, ianTuple.sum);
+	// return 6;
+	
 	// If two args then run the experimental branch 
 	// If three args then run the correctness branch on the
 	// input file provided. The results are dumped to "Results.txt"
