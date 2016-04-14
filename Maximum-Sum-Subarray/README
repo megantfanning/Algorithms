@@ -1,6 +1,5 @@
 Project Description:
-the maximum subarray problem is the task of finding the contiguous subarray within a one-dimensional array of numbers,
-which has the largest sum
+the maximum subarray problem is the task of finding the contiguous subarray within a one-dimensional array of numbers, which has the largest sum
 
 File Descriptions:
 The Algorithms themselves are primarily encapsulated in the Algos.c file
