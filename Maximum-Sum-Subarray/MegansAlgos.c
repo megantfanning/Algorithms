@@ -28,13 +28,10 @@ struct Tuple MSS_DAC (int A[],int low,int high){
         cTuple =MSS_DAC_CROSS(A,low,mid,high);
 
         if(lTuple.sum >= rTuple.sum && lTuple.sum >= cTuple.sum){
-            //struct Tuple lTuple={llow,lhigh,lsum};
             return lTuple;
         }else if(rTuple.sum >= lTuple.sum && rTuple.sum >= cTuple.sum){
-            //struct Tuple rightResults={rlow, rhigh, rsum};
             return rTuple;
         }else{
-            //struct Tuple cTuple={clow, chigh, csum};
             return cTuple;
         }
     }
@@ -43,8 +40,8 @@ struct Tuple MSS_DAC (int A[],int low,int high){
 //The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
 struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high)
 {
-
-    int leftSum,rightSum,maxSum,max_left,max_right,left_sum, right_sum,maxLeft,sum;//TODO define
+    //int definition
+    int leftSum,rightSum,maxSum,max_left,max_right,left_sum, right_sum,maxLeft,sum;
     for (int i = mid; i< low; i--){
         int sum = sum + A[i];
         
