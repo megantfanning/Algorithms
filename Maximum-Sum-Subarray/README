@@ -1,2 +1,15 @@
+Project Description:
+the maximum subarray problem is the task of finding the contiguous subarray within a one-dimensional array of numbers, which has the largest sum
+
+File Descriptions:
+The Algorithms themselves are encapsulated in the Algos.c file
+Test cases are being run by the main.c program
+UserInt.c provides works in conjunction with main to create the experimental runtime results for all algorithms. 
+DynamicArray.c provides code for a dynamic array structure utilized in testing
+Program reads the input MSS_Problems.txt. 
+Output written to MSS_Results.txt
+
+Instructions for running the project
 1) Correctness - enter "prog Correctness filenametobeparsed"
 2) Experimental - enter "prog Experimenal"
+
