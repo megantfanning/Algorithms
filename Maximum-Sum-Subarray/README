@@ -5,6 +5,8 @@ File Descriptions:
 The Algorithms themselves are primarily encapsulated in the Algos.c file
 Test cases are being run by the main.c program
 DynamicArray.c provides code for a dynamic array structure utilized in testing
+Program reads the input MSS_Problems.txt. 
+Output written to MSS_Results.txt
 
 Instructions for running the project
 1) Correctness - enter "prog Correctness filenametobeparsed"
