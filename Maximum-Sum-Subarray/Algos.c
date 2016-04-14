@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include "Algos.h"
 
 // Creates the internal array to the struct DynArray
@@ -105,58 +106,84 @@ int GoodEnum(DynArr *v, int *start, int *end)
 	return iMaxSum;
 }
 
-// struct tuple{
-    // int low;
-    // int high;
-    // int sum;
-// }
+// The recursive MSS-DAC algorithm checks for the base case, 
+// then makes two recursive calls on subproblems, then one 
+// call to the helper subroutine MASS-DAC-CROSS, and finally 
+// it does a series of comparisons to return the maximum. 
+struct Tuple MSS_DAC (int A[],int low,int high)
+{
+	printf("%d",A[3]);
+	
+    // int llow,rlow,rhigh,rsum,clow,chigh,csum,lhigh,lsum;//TODO define
+	int mid; 
+	struct Tuple lTuple, rTuple, cTuple;
+			
+	// Only one element present so return as high and low
+    if(high == low)
+	{
+        int temp = A[low];
+        struct Tuple equal = {low, high, temp};
+        return equal;
+    }
+	// Find the midpoint and then recurse on the left, right and 
+	// straddling chunks 
+	else
+	{
+        mid = floor((low + high) / 2);
+        lTuple = MSS_DAC(A, low, mid);
+        rTuple = MSS_DAC(A, mid + 1, high);
+        cTuple = MSS_DAC_CROSS(A, low, mid, high);
 
-// //The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
-// //TODO fix return
-// int MSS_DAC (int A[],int low,int high){
-    // if(high == low){
-        // return (low, high, A[low]);//TODO
-    // }else{
-        // int mid = floor((low + high) / 2);
-        // int llow,rlow,rhigh,rsum,clow,chigh,csum,lhigh,lsum;//TODO define
-        // //tuple (llow, lhigh, lsum) = MSS_DAC(A, low, mid); 
-        // //tuple (rlow, rhigh, rsum) = MSS_DAC(A, mid + 1, high);
-        // //tuple (clow, chigh, csum) = MSS_DAC_CROSS(A, low, mid, high);
-        // if(lsum >= rsum && lsum >= csum){
-            // return (llow, lhigh, lsum);
-        // }else if(rsum >= lsum && rsum >= csum){
-            // return (rlow, rhigh, rsum);
-        // }else{
-            // return (clow, chigh, csum);//TODO
-        // }
-    // }
-// }
+        if(lTuple.sum >= rTuple.sum && lTuple.sum >= cTuple.sum)
+		{
+            // struct Tuple lTuple = {llow, lhigh, lsum};
+            return lTuple;
+        }
+		else if(rTuple.sum >= lTuple.sum && rTuple.sum >= cTuple.sum)
+		{
+            // struct Tuple rTuple = {rlow, rhigh, rsum};
+            return rTuple;
+        }
+		else
+		{
+            // struct Tuple cTuple = {clow, chigh, csum};
+            return cTuple;
+        }
+    }
+}
 
-// //The recursive MSS-DAC algorithm checks for the base case, then makes two recursive calls on subproblems,
-// // then one call to the helper subroutine MASS-DAC-CROSS, and finally it does a series of comparisons to return the maximum. 
+//The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
+//TODO fix return
+struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high)
+{
+    int sum = 0;
+	int left_sum = -9999;
+	int max_right = -999;
+	int max_left = -999;
 
-// int MSS_DAC_CROSS(int A[],int low,int mid,int high){
-    // //left-sum = -∞
-    // int sum = 0;
-    // int left,right,max;//TODO define
-    // for (int i = mid;i< low; i--){
-        // sum = sum + A[i];
+    for (int i = mid; i < low; i--)
+	{
+        sum = sum + A[i];
         
-        // if(sum > left-sum){
-            // sum=left-sum;
-            // i= max-left;
-        // }
-    // }
-    // //right-sum = -∞
-    // sum = 0;
+        if(sum > left_sum)
+		{
+            left_sum = sum;
+			max_left = i;
+        }
+    }
 
-    // for (int j = mid + 1; j < high; j++){
-        // sum = sum + A[j];
-        // if (sum > right-sum){
-            // sum=right-sum;
-            // j=max-right;
-        // }
-    // }
-    // return (max-left, max-right, left-sum + right-sum);//TODO
-// }
+    sum = 0;
+	int right_sum = -9999;
 
+    for (int j = mid + 1; j < high; j++)
+	{
+        sum = sum + A[j];
+        if (sum > right_sum)
+		{
+            right_sum = sum;
+            max_right = j;
+        }
+    }
+    struct Tuple maxTuple = {max_left, max_right, left_sum + right_sum};
+    return maxTuple;
+}

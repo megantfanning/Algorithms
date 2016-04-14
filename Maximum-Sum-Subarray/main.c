@@ -35,6 +35,15 @@ int main (int argc, const char * argv[])
 	int iResults = -99; // Global reusable results indicator
 	int iEpoch = (int)time(NULL); // Seconds since epoch 
 
+	int arr[10] = {4,6,-3,6,3,-9, 5,2,3, 4};
+	struct Tuple test;
+
+	test = MSS_DAC(arr, 0, 9);
+	printf("%d %d %d", test.low, test.high, test.sum);
+	
+	return 1;
+	
+	
 	// If two args then run the experimental branch 
 	// If three args then run the correctness branch on the
 	// input file provided. The results are dumped to "Results.txt"

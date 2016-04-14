@@ -10,7 +10,7 @@ UserInt.o: UserInt.c UserInt.h
 	gcc -Wall -std=c99 -c UserInt.c	
 
 prog: dynamicArray.o Algos.o UserInt.o main.c
-	gcc -Wall -std=c99 -o prog dynamicArray.o Algos.o UserInt.o main.c 
+	gcc -Wall -std=c99 -o prog dynamicArray.o Algos.o UserInt.o main.c -lm
 		
 clean:
 	rm dynamicArray.o
