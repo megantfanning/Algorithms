@@ -113,6 +113,8 @@ int GoodEnum(DynArr *v, int *start, int *end)
 struct Tuple MSS_DAC (int A[],int low,int high)
 {
 	printf("%d",A[3]);
+	struct Tuple ian;
+	return ian;
 	
     // int llow,rlow,rhigh,rsum,clow,chigh,csum,lhigh,lsum;//TODO define
 	int mid; 
