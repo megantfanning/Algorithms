@@ -123,11 +123,15 @@ struct Tuple MSS_DAC (DynArr *A, int low, int high)
     }
 	else
 	{
+        //find midpoint
         int mid = floor((low + high) / 2);
-        lTuple =MSS_DAC(A,low,mid);
-        rTuple =MSS_DAC(A, mid+1, high);
-        cTuple =MSS_DAC_CROSS(A,low,mid,high);
 
+        //call MSS_DAC to return a tuple from the right, left and center ranges
+        lTuple = MSS_DAC(A,low,mid);
+        rTuple = MSS_DAC(A, mid+1, high);
+        cTuple = MSS_DAC_CROSS(A,low,mid,high);
+
+        //find the greatest tuple and return that
         if(lTuple.sum >= rTuple.sum && lTuple.sum >= cTuple.sum)
 		{
             return lTuple;
@@ -166,7 +170,7 @@ struct Tuple MSS_DAC_CROSS(DynArr *A, int low, int mid, int high)
         }
     }
 	
-	// Reinit the resuable sum
+	// Re-initialize the resuable sum
 	sum = 0;
 	
 	// Find the max for the right
@@ -186,7 +190,8 @@ struct Tuple MSS_DAC_CROSS(DynArr *A, int low, int mid, int high)
     return maxTuple;
 }
 
-// COMMENTS = TODO
+//Linear Time Algorithm
+//iterate over the array checking the sum of the subarray as you go
 struct Tuple lTime(DynArr *v)
 {
 	// Local declares 
@@ -194,15 +199,18 @@ struct Tuple lTime(DynArr *v)
     int n = sizeDynArr(v); //A.length
     int max_sum = INT_MIN;//-∞
     int ending_here_sum = INT_MIN;//-∞
-	
+    	
     for (int j = 0; j < n; j++){
         int ending_here_high = j;
+        //check sum and reset ending_here_sum to the the current iteration 
+        //of the array, 
         if (ending_here_sum > 0){
             ending_here_sum = ending_here_sum + getDynArr(v, j); //A[j]; 
         }else{
             ending_here_low = j;
             ending_here_sum = getDynArr(v, j); // A[j];
         }
+        //if the new ending_sum is greater than max sum reset high and low
         if (ending_here_sum > max_sum){
             max_sum = ending_here_sum;
             low = ending_here_low;
