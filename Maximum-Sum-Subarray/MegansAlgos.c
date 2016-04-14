@@ -41,11 +41,10 @@ struct Tuple MSS_DAC (int A[],int low,int high){
 }
 
 //The MSS-DAC-CROSS helper subroutine finds the both left and right sides of the maximum crossing subarray 
-//TODO fix return
 struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high)
 {
 
-    int leftSum,rightSum,maxSum;//TODO define
+    int leftSum,rightSum,maxSum,max_left,max_right,left_sum, right_sum,maxLeft,sum;//TODO define
     for (int i = mid; i< low; i--){
         int sum = sum + A[i];
         
@@ -54,16 +53,16 @@ struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high)
             i= maxLeft;//how is max defined?
         }
     }
-    //right-sum = -∞
-    //sum = 0;
+    rightSum = INT_MIN; //-∞
+    sum = 0;
 
     for (int j = mid + 1; j < high; j++)
 	{
-        sum = sum + A[j];
+        int sum = sum + A[j];
         if (sum > right_sum)
 		{
-            right_sum = sum;
-            max_right = j;
+            int right_sum = sum;
+            int max_right = j;
         }
     }
     struct Tuple maxTuple = {max_left, max_right, left_sum + right_sum};
@@ -71,3 +70,25 @@ struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high)
 }
 
 
+struct Tuple MSS_LINEAR (int A[]){
+    int low,high,ending_here_low;
+    int n = sizeof(A)/sizeof(int); //A.length
+    int max_sum = INT_MIN;//-∞
+    int ending_here_sum = INT_MIN;//-∞
+    for (int j = 0; j< n-1;j++){
+        int ending_here_high = j;
+        if (ending_here_sum > 0){
+            ending_here_sum = ending_here_sum + A[j];
+        }else{
+            ending_here_low = j;
+            ending_here_sum = A[j];
+        }
+        if (ending_here_sum > max_sum){
+            max_sum = ending_here_sum;
+            low = ending_here_low;
+            high = ending_here_high;
+        }
+    }
+    struct Tuple maxTuple={low,high,max_sum};
+    return maxTuple;
+}
