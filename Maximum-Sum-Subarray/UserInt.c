@@ -268,8 +268,67 @@ int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile)
 		// Reset the internal indexes 
 		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
 		
+		// Reset the tuple 
+		tResults.low = tResults.high = tResults.sum = -99;
+		
 		// Close the file 
 		fclose(fileptr);
+			
+		/* ---------------------------------------------------------- */
+		// Pass to the divide and conquer algorithm
+		tResults = MSS_DAC(segData, 0, sizeDynArr(segData) - 1);
+
+		// Open the file again in append mode
+		fileptr = fopen(bufFile, "a");
+		
+		// Handle bad file open 
+		if (fileptr == NULL)
+		{
+			fprintf(stderr, "Cannot open %s.\n", bufFile);
+			return -99;
+		}
+		else
+		{
+			// Write the name of the algo
+			fprintf(fileptr, "DVC\n");
+			
+			// Write the results to the file handling the 
+			// case of only one data point in the input set
+			if(tResults.low == 0 && tResults.high == 0)
+			{
+				fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
+			}
+			else 
+			{
+				for(i = 0; i < (tResults.high - tResults.low) + 1; i++)
+				{
+					if(i == 0)
+					{
+						fprintf(fileptr, "[%d, ", getDynArr(segData, (tResults.low + i)));
+					}
+					else if(i == (tResults.high - tResults.low))
+					{
+						fprintf(fileptr, "%d]", getDynArr(segData, (tResults.low + i)));
+					}
+					else
+					{
+						fprintf(fileptr, "%d, ", getDynArr(segData, (tResults.low + i)));
+					}
+				}
+			}
+			
+			// Add a new line and the sum
+			fprintf(fileptr, "\nSum: %d\n\n", tResults.sum);
+		}
+		
+		// Reset the internal indexes 
+		iStartIdx1 = iEndIdx1 = iMaxSum = -99;
+		
+		// Reset the tuple 
+		tResults.low = tResults.high = tResults.sum = -99;
+		
+		// Close the file 
+		fclose(fileptr);		
 
 		/* ---------------------------------------------------------- */
 		// Pass to the linear time recurive algo 
@@ -353,8 +412,8 @@ int expData(const char *filename)
 	int sampleSizes[4][10] = 	{
 									{200, 300, 400, 500, 600, 700,  800, 900, 1000, 1100}, 			// Bad enum
 									{200, 500, 800, 1100, 1400, 1700, 2000, 2300, 2600, 2900},  	// Good enum
-									{100, 200, 300, 400, 500, 600,  700, 800, 900, 1000},  			// DVC
-									{100, 200, 300, 400, 500, 600,  700, 800, 900, 1000}  			// Linear
+									{500, 1000, 1500, 2000, 2500, 3000,  3500, 4000, 4500, 5000},  	// DVC
+									{500, 1000, 1500, 2000, 2500, 3000,  3500, 4000, 4500, 5000}  	// Linear
 								};
 	// int badEnumSamples[10] = {200, 300, 400, 500, 600, 700,  800, 900, 1000, 1100};
 	//int badEnumSamples[10] = {20, 300, 40, 50, 60, 70,  80, 90, 100, 110}; - Valgrind tester
@@ -433,12 +492,15 @@ int expData(const char *filename)
 							iResults = GoodEnum(randN, &iStart, &iEnd);
 							break;
 						case 2:
-							iResults = BadEnum(randN, &iStart, &iEnd);
+							tResults = MSS_DAC(randN, 0, sizeDynArr(randN) - 1);
 							break;
 						case 3:				
 							tResults = lTime(randN);
 							break;
 					}
+					
+					// Remove warning
+					if(iResults == 0 && tResults.sum == 0){}
 								
 					// Get the time delta 
 					cEnd = clock();

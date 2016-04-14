@@ -106,7 +106,85 @@ int GoodEnum(DynArr *v, int *start, int *end)
 	return iMaxSum;
 }
 
-//TODO insert DAC and DAC_cross here
+// The recursive MSS-DAC algorithm checks for the base case, 
+// then makes two recursive calls on subproblems, then one 
+// call to the helper subroutine MASS-DAC-CROSS, and finally 
+// it does a series of comparisons to return the maximum. 
+struct Tuple MSS_DAC (DynArr *A, int low, int high)
+{
+	// Local declares
+    struct Tuple lTuple,rTuple,cTuple;
+		
+    if(high == low)
+	{
+        int temp = getDynArr(A, low); // A[low];
+        struct Tuple equal = {low, high, temp};
+        return equal;
+    }
+	else
+	{
+        int mid = floor((low + high) / 2);
+        lTuple =MSS_DAC(A,low,mid);
+        rTuple =MSS_DAC(A, mid+1, high);
+        cTuple =MSS_DAC_CROSS(A,low,mid,high);
+
+        if(lTuple.sum >= rTuple.sum && lTuple.sum >= cTuple.sum)
+		{
+            return lTuple;
+        }
+		else if(rTuple.sum >= lTuple.sum && rTuple.sum >= cTuple.sum)
+		{
+            return rTuple;
+        }
+		else
+		{
+            return cTuple;
+        }
+    }
+}
+
+//The MSS-DAC-CROSS helper subroutine finds the both left and right 
+// sides of the maximum crossing subarray 
+struct Tuple MSS_DAC_CROSS(DynArr *A, int low, int mid, int high)
+{
+    // Local declares
+	int left_sum = INT_MIN;
+	int max_left = INT_MIN;
+	int right_sum = INT_MIN;
+	int max_right = INT_MIN;
+	int sum = 0;
+	
+	// Find max of left 
+    for (int i = mid; i >= low; i--)
+	{
+        sum = sum + getDynArr(A, i); // A[i];
+        
+        if(sum > left_sum)
+		{
+            left_sum = sum;
+			max_left = i;
+        }
+    }
+	
+	// Reinit the resuable sum
+	sum = 0;
+	
+	// Find the max for the right
+    for (int j = mid + 1; j <= high; j++)
+	{
+        sum = sum + getDynArr(A, j); // A[j];
+		
+        if (sum > right_sum)
+		{
+            right_sum = sum;
+            max_right = j;
+        }
+    }
+	
+	// Return the max of the right, left and spanner
+    struct Tuple maxTuple = {max_left, max_right, left_sum + right_sum};
+    return maxTuple;
+}
 
 // COMMENTS = TODO
 struct Tuple lTime(DynArr *v)

@@ -37,7 +37,7 @@ int main (int argc, const char * argv[])
 
 	// DynArr *tester;
 	// // [10, -11, -1, -9, 33, -45, 23, 24, -1, -7, -8, 19] 
-	// tester = createDynArr(9);
+	// tester = createDynArr(12);
 	// addDynArr(tester, 10);
 	// addDynArr(tester, -11);
 	// addDynArr(tester, -1);	
@@ -51,7 +51,8 @@ int main (int argc, const char * argv[])
 	// addDynArr(tester, -8);
 	// addDynArr(tester, 19);
 	
-	// struct Tuple ianTuple = lTime(tester);
+	// // struct Tuple MSS_DAC(DynArr *A, int low, int high);
+	// struct Tuple ianTuple = MSS_DAC(tester, 0, sizeDynArr(tester) - 1);
 	// printf("%d %d %d ", ianTuple.low, ianTuple.high, ianTuple.sum);
 	// return 6;
 	
@@ -59,7 +60,7 @@ int main (int argc, const char * argv[])
 	// If three args then run the correctness branch on the
 	// input file provided. The results are dumped to "Results.txt"
     if(argc == 2 && strcmp(argv[1], "Experimental") == 0)
-	{
+	{		
 		// Create the name of the exp results file 
 		snprintf(bufFile, sizeof bufFile, "%s%d%s", "Exp", iEpoch, ".txt");
 		

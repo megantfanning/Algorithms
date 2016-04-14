@@ -26,8 +26,8 @@ struct Tuple{
 // and end points.
 int BadEnum(DynArr *v, int * start, int *end);
 int GoodEnum(DynArr *v, int *start, int *end);
-struct Tuple MSS_DAC (int A[],int low,int high);
-struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high);
+struct Tuple MSS_DAC(DynArr *A, int low, int high);
+struct Tuple MSS_DAC_CROSS(DynArr *A, int low, int mid, int high);
 struct Tuple lTime(DynArr *v);
 
 #endif
