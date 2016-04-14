@@ -4,7 +4,7 @@
 
 #ifndef ALGOS_INCLUDED
 #define ALGOS_INCLUDED 1
-
+#define INT_MIN (-2147483647 - 1)
 //define tuple struct
 struct Tuple{
     int low;
@@ -21,6 +21,5 @@ int dVC(DynArr *v, int *start, int *end);
 int lTime(DynArr *v, int *start, int *end);
 struct Tuple MSS_DAC (int A[],int low,int high);
 struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high);
-
 
 #endif

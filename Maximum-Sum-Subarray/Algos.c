@@ -138,14 +138,14 @@ struct Tuple MSS_DAC (int A[],int low,int high){
 
 struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high){
     //left-sum = -∞
-    //int sum = 0;
-    int left,right,max;//TODO define
-    for (int i = mid;i< low; i--){
-        sum = sum + A[i];
+    int sum = 0;
+    int leftSum,rightSum,maxSum;//TODO define
+    for (int i = mid; i< low; i--){
+        int sum = sum + A[i];
         
-        if(sum > left-sum){
-            sum=left-sum;
-            i= max-left;//how is max defined?
+        if(sum > leftSum){
+            sum=leftSum;
+            i= maxLeft;//how is max defined?
         }
     }
     //right-sum = -∞
@@ -153,14 +153,36 @@ struct Tuple MSS_DAC_CROSS(int A[],int low,int mid,int high){
 
     for (int j = mid + 1; j < high; j++){
         sum = sum + A[j];
-        if (sum > right-sum){
-            sum=right-sum;
-            j=max-right;
+        if (sum > rightSum){
+            sum=rightSum;
+            j=maxRight;
         }
     }
-    struct Tuple maxTuple={max-left, max-right, left-sum + right-sum};
+    struct Tuple maxTuple={maxLeft, maxRight, leftSum + rightSum};
     return maxTuple;
 }
 
 
-
+struct Tuple MSS_LINEAR (int A[]){
+    int endingHereHigh,endingHereSum,endingHereLow;
+    int n = sizeof(A)/sizeof(int);//A.length
+    
+    //max-sum = -∞
+    //ending-here-sum = -∞
+    for (int j = 0; j <= n-1; j++){
+        endingHereHigh = j;
+        if (endingHereSum > 0){
+            endingHereSum = endingHereSum + A[j];
+        }else{
+            int endingHereLow = j;
+            endingHereSum = A[j];
+        }
+        if (endingHereSum > maxSum){
+            int maxSum = endingHereSum;
+            int low = endingHereLow;
+            int high = endingHereHigh;
+        }
+    }
+    struct Tuple maxTuple={low, high, max-sum};
+    return maxTuple;
+}
