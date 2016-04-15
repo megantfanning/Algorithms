@@ -48,8 +48,10 @@ int main (int argc, const char * argv[])
 	{	
         printf("Running Experimental Test results will be saved to Exp.txt \n");	
 		// Create the name of the exp results file 
-		snprintf(bufFile, sizeof bufFile, "%s%d%s", "Exp", iEpoch, ".txt");
+		//snprintf(bufFile, sizeof bufFile, "%s%d%s", "Exp", iEpoch, ".txt");
+		snprintf(bufFile, sizeof bufFile,"MSS_ExpResults.txt");
 		
+
 		// Call the experimental function 
 		iResults = expData(bufFile);
 		
@@ -67,7 +69,9 @@ int main (int argc, const char * argv[])
 	{
         printf("Running Correctness Test results will be saved to Results.txt\n");
 		// Create the name of the correctness results file 
-		snprintf(bufFile, sizeof bufFile, "%s%d%s", "Results", iEpoch, ".txt");
+		//snprintf(bufFile, sizeof bufFile, "%s%d%s", "Results", iEpoch, ".txt");
+        snprintf(bufFile, sizeof bufFile, "MSS_Results.txt");
+
 		
 		// Define the name of the file to be parsed 
 		rawFile = argv[2];
