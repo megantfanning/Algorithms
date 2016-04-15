@@ -1,5 +1,6 @@
 Project Description:
 the maximum subarray problem is the task of finding the contiguous subarray within a one-dimensional array of numbers, which has the largest sum
+Note: these algorithms do not work in the file contains all negative numbers.
 
 File Descriptions:
 The Algorithms themselves are encapsulated in the Algos.c file
@@ -11,6 +12,6 @@ Output written to MSS_Results.txt
 
 Instructions for running the project
 1) Correctness - enter "prog Correctness filenametobeparsed"
-The results are dumped to "Results.txt" with a number extension for each test.
+Output is to be written to MSS_Results.txt. 
 2) Experimental - enter "prog Experimenal"
-The results are dumped to "Exp.txt" with a number extension for each test.
+output is written to Exp###.text
