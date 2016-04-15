@@ -1,0 +1,112 @@
+BadEnum
+[8, 1, 3, 3, 1, -1, -4, -6, 2, 8, 19]
+Sum: 34
+
+GoodEnum
+[8, 1, 3, 3, 1, -1, -4, -6, 2, 8, 19]
+Sum: 34
+
+DVC
+[8, 1, 3, 3, 1, -1, -4, -6, 2, 8, 19]
+Sum: 34
+
+LinearTime
+[8, 1, 3, 3, 1, -1, -4, -6, 2, 8, 19]
+Sum: 34
+
+BadEnum
+[2, 9, 8, 6, 5]
+Sum: 30
+
+GoodEnum
+[2, 9, 8, 6, 5]
+Sum: 30
+
+DVC
+[2, 9, 8, 6, 5]
+Sum: 30
+
+LinearTime
+[2, 9, 8, 6, 5]
+Sum: 30
+
+BadEnum
+[23, 24, -1, -7, -8, 19]
+Sum: 50
+
+GoodEnum
+[23, 24, -1, -7, -8, 19]
+Sum: 50
+
+DVC
+[23, 24, -1, -7, -8, 19]
+Sum: 50
+
+LinearTime
+[23, 24, -1, -7, -8, 19]
+Sum: 50
+
+BadEnum
+[59, 26, -53, 58, 97]
+Sum: 187
+
+GoodEnum
+[59, 26, -53, 58, 97]
+Sum: 187
+
+DVC
+[59, 26, -53, 58, 97]
+Sum: 187
+
+LinearTime
+[59, 26, -53, 58, 97]
+Sum: 187
+
+BadEnum
+[3, 2, 1, 1]
+Sum: 7
+
+GoodEnum
+[3, 2, 1, 1]
+Sum: 7
+
+DVC
+[3, 2, 1, 1]
+Sum: 7
+
+LinearTime
+[3, 2, 1, 1]
+Sum: 7
+
+BadEnum
+[12, 99, 99]
+Sum: 210
+
+GoodEnum
+[12, 99, 99]
+Sum: 210
+
+DVC
+[12, 99, 99]
+Sum: 210
+
+LinearTime
+[12, 99, 99]
+Sum: 210
+
+BadEnum
+[4, -1, 2, 1]
+Sum: 6
+
+GoodEnum
+[4, -1, 2, 1]
+Sum: 6
+
+DVC
+[4, -1, 2, 1]
+Sum: 6
+
+LinearTime
+[4, -1, 2, 1]
+Sum: 6
+

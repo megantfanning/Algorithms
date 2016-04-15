@@ -35,21 +35,6 @@ int main (int argc, const char * argv[])
 	int iResults = -99; // Global reusable results indicator
 	int iEpoch = (int)time(NULL); // Seconds since epoch 
 
-	// DynArr *tester;
-	// // [10, -11, -1, -9, 33, -45, 23, 24, -1, -7, -8, 19] 
-	// tester = createDynArr(12);
-	// addDynArr(tester, 10);
-	// addDynArr(tester, -11);
-	// addDynArr(tester, -1);	
-	// addDynArr(tester, -9);
-	// addDynArr(tester, 33);
-	// addDynArr(tester, -45);	
-	// addDynArr(tester, 23);
-	// addDynArr(tester, 24);
-	// addDynArr(tester, -1);
-	// addDynArr(tester, -7);
-	// addDynArr(tester, -8);
-	// addDynArr(tester, 19);
 	
 	// // struct Tuple MSS_DAC(DynArr *A, int low, int high);
 	// struct Tuple ianTuple = MSS_DAC(tester, 0, sizeDynArr(tester) - 1);
