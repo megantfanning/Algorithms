@@ -12,15 +12,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include "dynamicArray.h"
+#include "UserInt.h"
 #include "Algos.h"
 
 // Main Entry Point 
 int main (int argc, const char * argv[]) 
 {
     printf("Making Change\n");
-    // Programs accept
-    //An array V where V[i] is the value of the coin of the ith denomination.
-    // A value A which is the amount of change we are asked to make
+
+/*
+The execution of the program(s) should be as follows:
+ User runs the programs on the command-line, specifying a file ([input filename].txt) in which the first line containsthe array V, formatted as [1, 5, 10, 25], denominations in increasing order.
+ 
+The next line contains one integer value for which we must make change.
+Program output should be written to a file named [input filename]change.txt where [input filename].txt is the input filename, and should be formatted with the name of the algorithm used, the change result and the minimum number of coins m, per line.
+*/
 
 }
 
