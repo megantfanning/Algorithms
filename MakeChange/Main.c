@@ -27,7 +27,17 @@ The execution of the program(s) should be as follows:
 The next line contains one integer value for which we must make change.
 Program output should be written to a file named [input filename]change.txt where [input filename].txt is the input filename, and should be formatted with the name of the algorithm used, the change result and the minimum number of coins m, per line.
 */
+    //define these variables using file input
+    int A;
+    int V[4]={3,2,1,1,1};
 
+    //call agorithms
+    //Brute force/Divide and Conquer
+    int Change[]= changeslow(V[],A){}
+    //Greedy
+    int Change[]= changegreedy(V[],A){}
+    //Dynamic
+    int Change[]= changedp(V[],A){}
 }
 
 

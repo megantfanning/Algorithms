@@ -17,9 +17,13 @@
 // A value A which is the amount of change we are asked to make
 // return a array with a length of 4 (pennies, nickels, dimes, quarters)
 
-changeslow
-changegreedy
-changedp
+//Brute force/Divide and Conquer
+int * changeslow(int V[],int A){}
 
+//Greedy
+int * changegreedy(int V[],int A){}
+
+//Dynamic
+int * changedp(int V[],int A){}
 
 #endif

@@ -166,7 +166,8 @@ int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile)
 		}
 		
 		/* ---------------------------------------------------------- */
-		// Pass to the bad enumeration algo 
+		// Pass to the bad enumeration algo
+        //TODO BadEnum removal 
 		iMaxSum = BadEnum(segData, &iStartIdx1, &iEndIdx1);
 
 		// Open the file again in append mode
@@ -220,6 +221,7 @@ int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile)
 		
 		/* ---------------------------------------------------------- */
 		// Pass to the GOOD enumeration algo 
+        //TODO remove/fix
 		iMaxSum = GoodEnum(segData, &iStartIdx1, &iEndIdx1);
 
 		// Open the file again in append mode
@@ -276,6 +278,7 @@ int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile)
 			
 		/* ---------------------------------------------------------- */
 		// Pass to the divide and conquer algorithm
+        //TODO remove/fix
 		tResults = MSS_DAC(segData, 0, sizeDynArr(segData) - 1);
 
 		// Open the file again in append mode
