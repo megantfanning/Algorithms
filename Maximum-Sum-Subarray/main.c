@@ -34,12 +34,6 @@ int main (int argc, const char * argv[])
 	DynArr *rawIdx; // Dynamic array as defined in dynamicArray.h
 	int iResults = -99; // Global reusable results indicator
 	int iEpoch = (int)time(NULL); // Seconds since epoch 
-
-	
-	// // struct Tuple MSS_DAC(DynArr *A, int low, int high);
-	// struct Tuple ianTuple = MSS_DAC(tester, 0, sizeDynArr(tester) - 1);
-	// printf("%d %d %d ", ianTuple.low, ianTuple.high, ianTuple.sum);
-	// return 6;
 	
 	// If two args then run the experimental branch 
 	// If three args then run the correctness branch on the
