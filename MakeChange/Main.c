@@ -16,7 +16,7 @@
 #include "Algos.h"
 
 // References 
-// valgrind --tool=memcheck --leak-check=yes example1
+// valgrind --tool=memcheck --leak-check=yes Change InputTest.txt
 
 /*
 The execution of the program(s) should be as follows:
@@ -117,19 +117,6 @@ int main (int argc, const char * argv[])
 		// Return fail to the OS
 		return -99;
 	}
-
-
-    // //define these variables using file input
-    // int A;
-    // int V[4]={3,2,1,1,1};
-
-    // //call agorithms
-    // //Brute force/Divide and Conquer
-    // int Change[]= changeslow(V[],A){}
-    // //Greedy
-    // int Change[]= changegreedy(V[],A){}
-    // //Dynamic
-    // int Change[]= changedp(V[],A){}
 }
 
 

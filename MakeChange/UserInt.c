@@ -252,6 +252,9 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 		for(i = 0; i < sizeDynArr(resultAr); i++)
 			putDynArr(resultAr, i, 0);
 		
+		// Delete the result array 
+		deleteDynArr(resultAr);
+		
 		// Close the file 
 		fclose(fileptr);		
 
@@ -318,10 +321,13 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 		for(i = 0; i < sizeDynArr(resultAr); i++)
 			putDynArr(resultAr, i, 0);
 		
+		// Delete the result array 
+		deleteDynArr(resultAr);
+		
 		// Close the file 
 		fclose(fileptr);		
 		
-		/* DYNAMIC PROGRAMMIN --------------------------------------- */
+		/* DYNAMIC PROGRAMMING --------------------------------------- */
 		// Get the current time 
 		cStart = clock();
 		
@@ -399,134 +405,6 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 	return 1;
 }
 
-// // Create the experimental runtime results for all 
-// // algorithms. Each algorithm will be tested with 
-// // 10 samples sizes and 10 runs per sample size and the 
-// // average calculated from the ten.
-// int expData(const char *filename)
-// {
-	// // Local declares
-	// clock_t cStart, cEnd;
-	// double dDuration;
-	// double dTotalTime = 0;
-	// DynArr *randN; // Array of random integers based on the sample sizes required
-	// FILE *fileptr;
-	// int sampleSizes[4][10] = 	{
-									// {200, 300, 400, 500, 600, 700,  800, 900, 1000, 1100}, 													// Bad enum
-									// {500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000},  											// Good enum
-									// {500000, 1000000, 1500000, 2000000, 2500000, 3000000,  3500000, 4000000, 4500000, 5000000},  			// DVC
-									// {5000000, 10000000, 15000000, 20000000, 25000000, 30000000,  35000000, 40000000, 45000000, 50000000}  	// Linear
-								// };
-
-	// int iIdx = -99; // Shared indexer 
-	// int jIdx = -99; // Shared indexer
-	// int kIdx = -99; // Shared indexer
-	// int hIdx = -99; // Shared indexer
-	// int iResults = -99; // Shared results 
-	// int iStart = -99; // Start passed as ref to algos 
-	// int iEnd = -99; // End passed as ref to algos 
-	// struct Tuple tResults; // Tuple to hold the results of recursive calls
-	
-	// // Plant the random number generator seed 
-	// srand(time(NULL));
-	
-	// // Open the file in write mode
-	// fileptr = fopen(filename, "w");
-	
-	// // Handle bad file open 
-	// if (fileptr == NULL)
-	// {
-		// fprintf(stderr, "Cannot open %s.\n", filename);
-		// return -99;
-	// }
-	// else
-	// {
-		// // Outer loop for each of the algos 
-		// for(hIdx = 0; hIdx < 4; hIdx++)
-		// {
-			// // Write the algo name once 
-			// switch(hIdx)
-			// {
-				// case 0:
-					// fprintf(fileptr, "BadEnum\n");
-					// break;
-				// case 1:
-					// fprintf(fileptr, "GoodEnum\n");
-					// break;
-				// case 2:
-					// fprintf(fileptr, "DVC\n");
-					// break;
-				// case 3:				
-					// fprintf(fileptr, "Linear\n");
-					// break;
-			// }
-			
-			// // Loop to get each of the sample sizes 
-			// for(iIdx = 0; iIdx < 10; iIdx++)
-			// {
-				// // Get ten samples of the sample size 
-				// for(jIdx = 0; jIdx < 10; jIdx++)
-				// {
-					// // Create an array the size of the sample size from master table
-					// randN = createDynArr(sampleSizes[hIdx][iIdx]);
-					
-					// // Assign random numbers to the array
-					// for(kIdx = 0; kIdx < sampleSizes[hIdx][iIdx]; kIdx++)
-					// {
-						// addDynArr(randN, (rand() % 1000) - 500);
-					// }
-					
-					// // Get the current time 
-					// cStart = clock();
-					
-					// // Pass through the algorithm based on the value of outer loop
-					// iResults = 0;
-					// switch(hIdx)
-					// {
-						// case 0:
-							// iResults = BadEnum(randN, &iStart, &iEnd);
-							// break;
-						// case 1:
-							// iResults = GoodEnum(randN, &iStart, &iEnd);
-							// break;
-						// case 2:
-							// tResults = MSS_DAC(randN, 0, sizeDynArr(randN) - 1);
-							// break;
-						// case 3:				
-							// tResults = lTime(randN);
-							// break;
-					// }
-					
-					// // Remove warning
-					// if(iResults == 0 && tResults.sum == 0){}
-								
-					// // Get the time delta 
-					// cEnd = clock();
-					// dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
-					// dTotalTime = dTotalTime + dDuration;
-					
-					// // Write the times to file 
-					// fprintf(fileptr, "%f ", dDuration);
-					
-					// //  Blow out the array
-					// deleteDynArr(randN);
-				// }
-				
-				// // Write the average to file
-				// fprintf(fileptr, "%f\n\n", dTotalTime / 10);
-				
-				// // Clean out the total and durations 
-				// dDuration = dTotalTime = 0;
-			// }
-		// }
-	// }
-	
-	// // Close the file 
-	// fclose(fileptr);
-	
-	// // Bounce
-	// return 1;
-// }
 
 
 

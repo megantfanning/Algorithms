@@ -66,13 +66,10 @@ DynArr * changeslow(DynArr *V, int A)
 	for(int i = 0; i < sizeDynArr(V); i++)
 		addDynArr(C, i*3);
 	
-	for(int i = 0; i < 32767; i++)
-			for(int j = 0; j < 32000; j++)
-			{}
+	for(int i = 0; i < 32767; i++){}
 	
 	return C;
 }
-
 
 // Greedy
 DynArr * changegreedy(DynArr *V, int A)
@@ -111,6 +108,56 @@ DynArr * changegreedy(DynArr *V, int A)
 	return MyCoins;
 }
 
+//Dynamic
+DynArr *changedp(DynArr *V, int A)
+{
+		// Locals 
+	DynArr *MyCoins;
+	DynArr *SubProbs;
+	int i = 0;
+	int j = 0;
+	int iCount = -99;
+
+	// Initialize return array
+	MyCoins = createDynArr(sizeDynArr(V));
+	for(i = 0; i < sizeDynArr(V); i++)
+		addDynArr(MyCoins, 0);
+	
+	// Initialize the subproblem array 
+	SubProbs = createDynArr(A + 1);
+	for(i = 0; i < A + 1; i++)
+		addDynArr(SubProbs, 0);
+	
+	// Loop to fill in the table 
+	for(i = 0; i < A + 1; i++)
+	{
+		iCount = i;
+		for(j = 0; j < sizeDynArr(V); j++)
+		{
+			if(getDynArr(V, j) <= i)
+			{
+				if(getDynArr(SubProbs, i - getDynArr(V, j)) + 1 < iCount)
+				{
+					iCount = getDynArr(SubProbs, i - getDynArr(V, j)) + 1;
+					
+					// Increment the denomination counter
+					putDynArr(MyCoins, j, getDynArr(MyCoins, j) + 1);
+				}
+			}
+		}
+		
+		putDynArr(SubProbs, i, iCount);
+	}
+	
+	for(i = 0; i < sizeDynArr(V); i++)
+		printf("%d ", getDynArr(MyCoins, i));
+	
+	// Clean up 
+	deleteDynArr(SubProbs);
+	
+	// Send the results back
+	return MyCoins;
+}
 
 // Greedy
 // DynArr * changegreedy(DynArr *V,int A)
@@ -151,48 +198,3 @@ DynArr * changegreedy(DynArr *V, int A)
         // }
     // }
 // }
-
-
-//Dynamic
-DynArr *changedp(DynArr *V, int A)
-{
-		// Locals 
-	DynArr *MyCoins;
-	DynArr *SubProbs;
-	int i = 0;
-	int j = 0;
-	int iCount = -99;
-
-	// Initialize return array
-	MyCoins = createDynArr(sizeDynArr(V));
-	for(i = 0; i < sizeDynArr(V); i++)
-		addDynArr(MyCoins, 0);
-	
-	// Initialize the subproblem array 
-	SubProbs = createDynArr(A + 1);
-	for(i = 0; i < A + 1; i++)
-		addDynArr(SubProbs, 0);
-	
-	// Loop to fill in the table 
-	for(i = 0; i < A + 1; i++)
-	{
-		iCount = i;
-		for(j = 0; j < sizeDynArr(V); j++)
-		{
-			if(getDynArr(V, j) <= i)
-			{
-				if(getDynArr(SubProbs, i - getDynArr(V, j)) + 1 < iCount)
-				{
-					iCount = getDynArr(SubProbs, i - getDynArr(V, j)) + 1;
-				}
-			}
-		}
-		
-		putDynArr(SubProbs, i, iCount);
-	}
-	
-	printf("%d ", getDynArr(SubProbs, A));
-	
-	return MyCoins;
-
-}
