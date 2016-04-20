@@ -321,6 +321,72 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 		// Close the file 
 		fclose(fileptr);		
 		
+		/* DYNAMIC PROGRAMMIN --------------------------------------- */
+		// Get the current time 
+		cStart = clock();
+		
+		// Pass to the changeslow algorithm
+		resultAr = changedp(segData, getDynArr(rawChange, iGlIdx));
+		
+		// Get the time delta 
+		cEnd = clock();
+		dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
+	
+		// Open the file again in append mode
+		fileptr = fopen(bufFile, "a");
+		
+		// Handle bad file open 
+		if (fileptr == NULL)
+		{
+			fprintf(stderr, "Cannot open %s.\n", bufFile);
+			return -99;
+		}
+		else
+		{
+			// Write the name of the algo 
+			fprintf(fileptr, "Algorithm changedp:\n");
+			
+			// Loop out the results from the returned array from algorithm
+			iSumCoins = 0;
+			for(i = 0; i < sizeDynArr(resultAr); i++)
+			{
+				if(i == 0)
+				{
+					fprintf(fileptr, "[%d, ", getDynArr(resultAr, i));
+				}
+				else if(i == sizeDynArr(resultAr) - 1)
+				{
+					fprintf(fileptr, "%d]", getDynArr(resultAr, sizeDynArr(resultAr) - 1));
+				}
+				else
+				{
+					fprintf(fileptr, "%d, ", getDynArr(resultAr, i));
+				}
+				
+				// Inc the sum counter 
+				iSumCoins = iSumCoins + getDynArr(resultAr, i);
+			}
+			
+			// Add a new line and the sum
+			fprintf(fileptr, "\n%d\n\n", iSumCoins);
+			
+			// Print the time if needed
+			if(iTimerFlag == 3)
+			{
+				printf("%s: %d %f\n", "changedp", iSumCoins, dDuration);
+			}
+		}
+		
+		// Reset the sum counter 
+		iSumCoins = -99;
+		
+		// Clean out the result array 
+		for(i = 0; i < sizeDynArr(resultAr); i++)
+			putDynArr(resultAr, i, 0);
+		
+		// Close the file 
+		fclose(fileptr);				
+
 		// Clean up the dynamic allocation
 		deleteDynArr(segData);
 		deleteDynArr(resultAr);

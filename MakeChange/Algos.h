@@ -19,12 +19,12 @@
 // 	each index in the respective locations.
 
 //Brute force/Divide and Conquer
-DynArr * changeslow(DynArr *V,int A);
+DynArr * changeslow(DynArr *V, int A);
 
 //Greedy
-DynArr * changegreedy(DynArr *V,int A); 
+DynArr * changegreedy(DynArr *V, int A); 
 
 //Dynamic
-//int * changedp(int V[],int A);
+DynArr * changedp(DynArr *V, int A);
 
 #endif

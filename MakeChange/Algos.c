@@ -28,6 +28,36 @@
 //Choose the i that minimizes this sum
 DynArr * changeslow(DynArr *V, int A)
 {
+	// // Locals 
+	// DynArr *MyCoins;
+	// int i = 0;
+	// int iRemaining = -99;
+	
+	// // Initialize iRemaining
+	// iRemaining = A;
+	
+	// // Initialize return array
+	// MyCoins = createDynArr(sizeDynArr(V));
+	// for(i = 0; i < sizeDynArr(V); i++)
+		// addDynArr(MyCoins, 0);
+	
+	// // Base case - zero ways to make change for 0 
+	// if(iRemaining <= 0)
+		// return 0;
+	
+	// // Loop through all the denominations and 
+	// // recursively call if possible. Possible 
+	// // meaning the amount remaining is greater
+	// // than the demonination
+	// for(i = 0; i < sizeDynArr(V); i++)
+	// {
+		// // Check if remaing greater
+		// if(iRemaining >= getDynArr(V, i))
+		// {
+			// MyCoins = changeslow(V, iRemaining - getDynArr(V, i));
+		// }
+	// }
+	
 	// Local declares 
 	DynArr *C;
 
@@ -122,7 +152,47 @@ DynArr * changegreedy(DynArr *V, int A)
     // }
 // }
 
-// int B[4]{3,0,0,0,}
 
-// //Dynamic
-// int * changedp(int V[],int A){}
+//Dynamic
+DynArr *changedp(DynArr *V, int A)
+{
+		// Locals 
+	DynArr *MyCoins;
+	DynArr *SubProbs;
+	int i = 0;
+	int j = 0;
+	int iCount = -99;
+
+	// Initialize return array
+	MyCoins = createDynArr(sizeDynArr(V));
+	for(i = 0; i < sizeDynArr(V); i++)
+		addDynArr(MyCoins, 0);
+	
+	// Initialize the subproblem array 
+	SubProbs = createDynArr(A + 1);
+	for(i = 0; i < A + 1; i++)
+		addDynArr(SubProbs, 0);
+	
+	// Loop to fill in the table 
+	for(i = 0; i < A + 1; i++)
+	{
+		iCount = i;
+		for(j = 0; j < sizeDynArr(V); j++)
+		{
+			if(getDynArr(V, j) <= i)
+			{
+				if(getDynArr(SubProbs, i - getDynArr(V, j)) + 1 < iCount)
+				{
+					iCount = getDynArr(SubProbs, i - getDynArr(V, j)) + 1;
+				}
+			}
+		}
+		
+		putDynArr(SubProbs, i, iCount);
+	}
+	
+	printf("%d ", getDynArr(SubProbs, A));
+	
+	return MyCoins;
+
+}
