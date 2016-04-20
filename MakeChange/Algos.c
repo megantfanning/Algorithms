@@ -49,48 +49,34 @@ DynArr * changegreedy(DynArr *V, int A)
 {
 	// Locals 
 	DynArr *MyCoins;
-    int i = 0;
-    int totalChange = 0;
-    int minCoins = 0;
+	int i = 0;
+	int iRemaining = -99;
+	
+	// Initialize iRemaining
+	iRemaining = A;
 	
 	// Initialize return array
 	MyCoins = createDynArr(sizeDynArr(V));
 	for(i = 0; i < sizeDynArr(V); i++)
-	{
 		addDynArr(MyCoins, 0);
-	}
-
-	// Create indexer based on size of V
-	i = sizeDynArr(V) - 1;
 	
-    while(totalChange != A && i >= 0)
+	// Loop through the V array and decrement iRemaining 
+	for(i = sizeDynArr(V) - 1; i >= 0; i--)
 	{
-        //Use the largest value coin possible.
-        if(getDynArr(V, i) > 0)
+		// Check if remaining is greater than coin value 
+		if(iRemaining >= getDynArr(V, i))
 		{
-            //check if the value of the coin to ensure we don't give too much change
-            if(getDynArr(V, i) + totalChange < A)
-			{
-				//increment the number of total coins used
-                minCoins++;
-				
-				// Increment the specific coin in the return array
-				putDynArr(MyCoins, i, getDynArr(MyCoins, i) + 1);
+			// Increment the count in return array 
+			putDynArr(MyCoins, i, getDynArr(MyCoins, i) + (iRemaining / getDynArr(V, i)));
 			
-               // Increment the change counter 
-				totalChange = totalChange + getDynArr(V, i);	
-            }
-			else
-			{
-                //if the value of i is too great to make change decrease to smaller size coin denomination
-                i--;
-            }
-        }
-		else
-		{
-            i--;
-        }
-    }
+			// Dec the remaining 
+			iRemaining = iRemaining - ((iRemaining / getDynArr(V, i)) * getDynArr(V, i));
+		}
+		
+		// Check for early exit 
+		if(iRemaining == 0)
+			break;
+	}
 	
 	return MyCoins;
 }
