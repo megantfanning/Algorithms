@@ -18,7 +18,7 @@ char* getWord(FILE *file, int *iFlag);
 
 // Get word wrapper containing a loop to 
 // repeatedly call getWord and build an array
-int fileToAr(const char *filename, DynArr *raw, DynArr *idx); 
+int fileToAr(const char *filename, DynArr *rawData, DynArr *rawIdx, DynArr *rawChange); 
 
 // Pass the rawData and rawIdx arrays with a file name into function
 // that will parse out the child arrays and run through each algorithm 
