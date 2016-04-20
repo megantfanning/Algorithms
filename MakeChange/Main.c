@@ -13,7 +13,7 @@
 #include <string.h>
 #include "dynamicArray.h"
 #include "UserInt.h"
-//#include "Algos.h"
+#include "Algos.h"
 
 // References 
 // valgrind --tool=memcheck --leak-check=yes example1
@@ -46,7 +46,9 @@ int main (int argc, const char * argv[])
 		// Return fail to os 
 		return -99;
 	}
-    else if(argc == 2)
+	// Second arg is file name and third is optional and when present will 
+	// print the running times to screen
+    else if(argc == 2 || argc == 3)
 	{
 		// Get the input file name 
 		inFile = argv[1];
@@ -82,24 +84,22 @@ int main (int argc, const char * argv[])
 			deleteDynArr(rawIdx);
 			deleteDynArr(rawChange);
 			
-			// Bounce
-			return 0;
+			// Return fail to the OS
+			return -99;
 		}
-		
-		// printf("\n\n");
-		// int i = 0;
-		// for(i = 0; i < sizeDynArr(rawData); i++)
-			// printf("%d ", getDynArr(rawData, i));
-		// printf("\n");
-		// for(i = 0; i < sizeDynArr(rawIdx); i++)
-			// printf("%d ", getDynArr(rawIdx, i));
-		// printf("\n");
-		// for(i = 0; i < sizeDynArr(rawChange); i++)
-			// printf("%d ", getDynArr(rawChange, i));
-		// printf("\n");
 		
 		// Reset iResults 
 		iResults = -99;
+		
+		// Call the correctness routine 
+		iResults = correctData(rawData, rawIdx, rawChange, outFile);
+		
+		// Check the results of correctData call
+		if(iResults < 0)
+		{
+			// Tell the user what happened
+			printf("Failure in correctData method. Contact admin.");
+		}
 		
 		// Delete the dynamic arrays 
 		deleteDynArr(rawData);
@@ -108,6 +108,14 @@ int main (int argc, const char * argv[])
 	
 		// Exit with success to OS 
 		return 0;
+	}
+	else
+	{
+		// Default case 
+		printf("Incorrect number of args. Try again.\n");
+		
+		// Return fail to the OS
+		return -99;
 	}
 
 

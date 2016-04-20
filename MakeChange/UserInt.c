@@ -11,7 +11,7 @@
 #include <time.h>
 #include "UserInt.h"
 #include "dynamicArray.h"
-// #include "Algos.h"
+#include "Algos.h"
 
 // Get the current word / number from a file stream
 char* getWord(FILE *file, int *iFlag)
@@ -154,56 +154,60 @@ int fileToAr(const char *filename, DynArr *rawData, DynArr *rawIdx, DynArr *rawC
 	return 1;
 }
 
-// Pass the rawData and rawIdx arrays with a file name into function
+// Pass the rawData, rawIdx and rawChange arrays with a file name into function
 // that will parse out the child arrays and run through each algorithm 
 // and write the results to the file name listed 
-// int correctData(DynArr *rawData, DynArr *rawIdx, const char *bufFile)
-// {
-	// // Local declares 
-	// DynArr *segData; // Segment of data that is reused and passed to each algo
-	// FILE *fileptr;
-	// int iStartIdx; // Starting index 
-	// int iGlIdx; // Global reusable indexer
-	// int iEndIdx; // Ending index
-	// int iStartIdx1 = -99; 
-	// int iEndIdx1 = -99;
-	// int iMaxSum = -99; // Return from algos - summation
-	// struct Tuple tResults; // Tuple of results from the recursive algos 
+int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange, const char *bufFile)
+{
+
+	// Local declares 
+	DynArr *segData; // Segment of data that is reused and passed to each algo
+	DynArr *resultAr; // Dynamic array pointer returned from algorithms 
+	FILE *fileptr;
+	int iStartIdx; // Starting index 
+	int iGlIdx; // Global reusable indexer
+	int iEndIdx; // Ending index
+	int iStartIdx1 = -99; 
+	int iEndIdx1 = -99;
 	
-	// // Get the subarrays from the large array and then pass 
-	// // to each of the algos and write to file in this loop
-	// iStartIdx = 0; 
-	// for(iGlIdx = 0; iGlIdx < sizeDynArr(rawIdx); iGlIdx++)
-	// {
-		// // Get the last index 
-		// iEndIdx = getDynArr(rawIdx, iGlIdx);
+	// Get the subarrays from the large array and then pass 
+	// to each of the algos and write to file in this loop
+	iStartIdx = 0; 
+	for(iGlIdx = 0; iGlIdx < sizeDynArr(rawIdx); iGlIdx++)
+	{
+		// Get the last index for each array in the master array rawData
+		iEndIdx = getDynArr(rawIdx, iGlIdx);
 		
-		// // Create a reusable dynamic array
-		// segData = createDynArr((iEndIdx - iStartIdx) + 1);
+		// Create a reusable dynamic array
+		segData = createDynArr((iEndIdx - iStartIdx) + 1);
 
-		// // Loop to add the elements to the new array 
-		// int i = 0;
-		// for(i = 0; i < (iEndIdx - iStartIdx) + 1; i++)
-		// {
-			// addDynArr(segData, getDynArr(rawData, iStartIdx + i));
-		// }
+		// Loop to add the elements to the new array 
+		int i = 0;
+		for(i = 0; i < (iEndIdx - iStartIdx) + 1; i++)
+		{
+			addDynArr(segData, getDynArr(rawData, iStartIdx + i));
+		}
 		
-		// /* ---------------------------------------------------------- */
-		// // Pass to the bad enumeration algo
-        // //TODO BadEnum removal 
-		// iMaxSum = BadEnum(segData, &iStartIdx1, &iEndIdx1);
+		/* ---------------------------------------------------------- */
+		// Pass to the changeslow algorithm
+		resultAr = changeslow(segData, getDynArr(rawChange, iGlIdx));
+		
+		printf("\n\n");
+		for(int m = 0; m < sizeDynArr(resultAr); m++)
+			printf("%d ", getDynArr(resultAr, m));
+		return 44;
 
-		// // Open the file again in append mode
-		// fileptr = fopen(bufFile, "a");
+		// Open the file again in append mode
+		fileptr = fopen(bufFile, "a");
 		
-		// // Handle bad file open 
-		// if (fileptr == NULL)
-		// {
-			// fprintf(stderr, "Cannot open %s.\n", bufFile);
-			// return -99;
-		// }
-		// else
-		// {
+		// Handle bad file open 
+		if (fileptr == NULL)
+		{
+			fprintf(stderr, "Cannot open %s.\n", bufFile);
+			return -99;
+		}
+		else
+		{
 			// // Write the name of the algo 
 			// fprintf(fileptr, "BadEnum\n");
 			
@@ -234,13 +238,13 @@ int fileToAr(const char *filename, DynArr *rawData, DynArr *rawIdx, DynArr *rawC
 			
 			// // Add a new line and the sum
 			// fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
-		// }
+		}
 		
-		// // Reset the internal indexes 
-		// iStartIdx1 = iEndIdx1 = iMaxSum = -99;
+		// Reset the internal indexes 
+		iStartIdx1 = iEndIdx1 = -99;
 		
-		// // Close the file 
-		// fclose(fileptr);
+		// Close the file 
+		fclose(fileptr);
 		
 		// /* ---------------------------------------------------------- */
 		// // Pass to the GOOD enumeration algo 
@@ -403,25 +407,22 @@ int fileToAr(const char *filename, DynArr *rawData, DynArr *rawIdx, DynArr *rawC
 			// fprintf(fileptr, "\nSum: %d\n\n", tResults.sum);
 		// }
 		
-		// // Reset the internal indexes 
-		// iStartIdx1 = iEndIdx1 = iMaxSum = -99;
-		
-		// // Reset the tuple 
-		// tResults.low = tResults.high = tResults.sum = -99;
-		
-		// // Close the file 
-		// fclose(fileptr);		
+		// Reset the internal indexes 
+		iStartIdx1 = iEndIdx1 = -99;
+			
+		// Close the file 
+		fclose(fileptr);		
 
-		// // Clean up the dynamic allocation
-		// deleteDynArr(segData);
+		// Clean up the dynamic allocation
+		deleteDynArr(segData);
 		
-		// // Set the start position
-		// iStartIdx = iEndIdx + 1;
-	// }
+		// Set the start position
+		iStartIdx = iEndIdx + 1;
+	}
 	
-	// // Bounce from the routine 
-	// return 1;
-// }
+	// Bounce from the routine 
+	return 1;
+}
 
 // // Create the experimental runtime results for all 
 // // algorithms. Each algorithm will be tested with 
