@@ -24,7 +24,7 @@ int fileToAr(const char *filename, DynArr *rawData, DynArr *rawIdx, DynArr *rawC
 // Pass the rawData and rawIdx arrays with a file name into function
 // that will parse out the child arrays and run through each algorithm 
 // and write the results to the file name listed
-int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange, const char *outFile);
+int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange, const char *outFile, int iTimerFlag);
 
 // Create the experimental runtime results for all 
 // algorithms. Each algorithm will be tested with 

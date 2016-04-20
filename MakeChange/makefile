@@ -22,3 +22,4 @@ clean:
 
 cleanall: clean
 	rm Change
+	rm *Change.txt

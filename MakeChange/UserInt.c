@@ -157,19 +157,20 @@ int fileToAr(const char *filename, DynArr *rawData, DynArr *rawIdx, DynArr *rawC
 // Pass the rawData, rawIdx and rawChange arrays with a file name into function
 // that will parse out the child arrays and run through each algorithm 
 // and write the results to the file name listed 
-int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange, const char *bufFile)
+int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange, 
+								const char *bufFile, int iTimerFlag)
 {
-
 	// Local declares 
+	clock_t cStart, cEnd;
+	double dDuration = -99;
 	DynArr *segData; // Segment of data that is reused and passed to each algo
 	DynArr *resultAr; // Dynamic array pointer returned from algorithms 
 	FILE *fileptr;
 	int iStartIdx; // Starting index 
 	int iGlIdx; // Global reusable indexer
 	int iEndIdx; // Ending index
-	int iStartIdx1 = -99; 
-	int iEndIdx1 = -99;
-	
+	int iSumCoins = -99; // Sum of coins used 
+		
 	// Get the subarrays from the large array and then pass 
 	// to each of the algos and write to file in this loop
 	iStartIdx = 0; 
@@ -189,14 +190,16 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange, const char *
 		}
 		
 		/* ---------------------------------------------------------- */
+		// Get the current time 
+		cStart = clock();
+		
 		// Pass to the changeslow algorithm
 		resultAr = changeslow(segData, getDynArr(rawChange, iGlIdx));
 		
-		printf("\n\n");
-		for(int m = 0; m < sizeDynArr(resultAr); m++)
-			printf("%d ", getDynArr(resultAr, m));
-		return 44;
-
+		// Get the time delta 
+		cEnd = clock();
+		dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
+	
 		// Open the file again in append mode
 		fileptr = fopen(bufFile, "a");
 		
@@ -208,213 +211,51 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange, const char *
 		}
 		else
 		{
-			// // Write the name of the algo 
-			// fprintf(fileptr, "BadEnum\n");
+			// Write the name of the algo 
+			fprintf(fileptr, "Algorithm changeslow:\n");
 			
-			// // Write the results to the file handling the 
-			// // case of only one data point in the input set
-			// if(iStartIdx1 == 0 && iEndIdx1 == 0)
-			// {
-				// fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
-			// }
-			// else 
-			// {
-				// for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
-				// {
-					// if(i == 0)
-					// {
-						// fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
-					// }
-					// else if(i == (iEndIdx1 - iStartIdx1))
-					// {
-						// fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
-					// }
-					// else
-					// {
-						// fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
-					// }
-				// }
-			// }
+			// Loop out the results from the returned array from algorithm
+			iSumCoins = 0;
+			for(i = 0; i < sizeDynArr(resultAr); i++)
+			{
+				if(i == 0)
+				{
+					fprintf(fileptr, "[%d, ", getDynArr(resultAr, i));
+				}
+				else if(i == sizeDynArr(resultAr) - 1)
+				{
+					fprintf(fileptr, "%d]", getDynArr(resultAr, sizeDynArr(resultAr) - 1));
+				}
+				else
+				{
+					fprintf(fileptr, "%d, ", getDynArr(resultAr, i));
+				}
+				
+				// Inc the sum counter 
+				iSumCoins = iSumCoins + getDynArr(resultAr, i);
+			}
 			
-			// // Add a new line and the sum
-			// fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
+			// Add a new line and the sum
+			fprintf(fileptr, "\n%d\n\n", iSumCoins);
+			
+			// Print the time if needed
+			if(iTimerFlag == 3)
+			{
+				printf("%s: %d %f\n", "changeslow", iSumCoins, dDuration);
+			}
 		}
 		
-		// Reset the internal indexes 
-		iStartIdx1 = iEndIdx1 = -99;
+		// Reset the sum counter 
+		iSumCoins = -99;
 		
-		// Close the file 
-		fclose(fileptr);
-		
-		// /* ---------------------------------------------------------- */
-		// // Pass to the GOOD enumeration algo 
-        // //TODO remove/fix
-		// iMaxSum = GoodEnum(segData, &iStartIdx1, &iEndIdx1);
-
-		// // Open the file again in append mode
-		// fileptr = fopen(bufFile, "a");
-		
-		// // Handle bad file open 
-		// if (fileptr == NULL)
-		// {
-			// fprintf(stderr, "Cannot open %s.\n", bufFile);
-			// return -99;
-		// }
-		// else
-		// {
-			// // Write the name of the algo
-			// fprintf(fileptr, "GoodEnum\n");
-			
-			// // Write the results to the file handling the 
-			// // case of only one data point in the input set
-			// if(iStartIdx1 == 0 && iEndIdx1 == 0)
-			// {
-				// fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
-			// }
-			// else 
-			// {
-				// for(i = 0; i < (iEndIdx1 - iStartIdx1) + 1; i++)
-				// {
-					// if(i == 0)
-					// {
-						// fprintf(fileptr, "[%d, ", getDynArr(segData, (iStartIdx1 + i)));
-					// }
-					// else if(i == (iEndIdx1 - iStartIdx1))
-					// {
-						// fprintf(fileptr, "%d]", getDynArr(segData, (iStartIdx1 + i)));
-					// }
-					// else
-					// {
-						// fprintf(fileptr, "%d, ", getDynArr(segData, (iStartIdx1 + i)));
-					// }
-				// }
-			// }
-			
-			// // Add a new line and the sum
-			// fprintf(fileptr, "\nSum: %d\n\n", iMaxSum);
-		// }
-		
-		// // Reset the internal indexes 
-		// iStartIdx1 = iEndIdx1 = iMaxSum = -99;
-		
-		// // Reset the tuple 
-		// tResults.low = tResults.high = tResults.sum = -99;
-		
-		// // Close the file 
-		// fclose(fileptr);
-			
-		// /* ---------------------------------------------------------- */
-		// // Pass to the divide and conquer algorithm
-        // //TODO remove/fix
-		// tResults = MSS_DAC(segData, 0, sizeDynArr(segData) - 1);
-
-		// // Open the file again in append mode
-		// fileptr = fopen(bufFile, "a");
-		
-		// // Handle bad file open 
-		// if (fileptr == NULL)
-		// {
-			// fprintf(stderr, "Cannot open %s.\n", bufFile);
-			// return -99;
-		// }
-		// else
-		// {
-			// // Write the name of the algo
-			// fprintf(fileptr, "DVC\n");
-			
-			// // Write the results to the file handling the 
-			// // case of only one data point in the input set
-			// if(tResults.low == 0 && tResults.high == 0)
-			// {
-				// fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
-			// }
-			// else 
-			// {
-				// for(i = 0; i < (tResults.high - tResults.low) + 1; i++)
-				// {
-					// if(i == 0)
-					// {
-						// fprintf(fileptr, "[%d, ", getDynArr(segData, (tResults.low + i)));
-					// }
-					// else if(i == (tResults.high - tResults.low))
-					// {
-						// fprintf(fileptr, "%d]", getDynArr(segData, (tResults.low + i)));
-					// }
-					// else
-					// {
-						// fprintf(fileptr, "%d, ", getDynArr(segData, (tResults.low + i)));
-					// }
-				// }
-			// }
-			
-			// // Add a new line and the sum
-			// fprintf(fileptr, "\nSum: %d\n\n", tResults.sum);
-		// }
-		
-		// // Reset the internal indexes 
-		// iStartIdx1 = iEndIdx1 = iMaxSum = -99;
-		
-		// // Reset the tuple 
-		// tResults.low = tResults.high = tResults.sum = -99;
-		
-		// // Close the file 
-		// fclose(fileptr);		
-
-		// /* ---------------------------------------------------------- */
-		// // Pass to the linear time recurive algo 
-		// tResults = lTime(segData);
-
-		// // Open the file again in append mode
-		// fileptr = fopen(bufFile, "a");
-		
-		// // Handle bad file open 
-		// if (fileptr == NULL)
-		// {
-			// fprintf(stderr, "Cannot open %s.\n", bufFile);
-			// return -99;
-		// }
-		// else
-		// {
-			// // Write the name of the algo
-			// fprintf(fileptr, "LinearTime\n");
-			
-			// // Write the results to the file handling the 
-			// // case of only one data point in the input set
-			// if(tResults.low == 0 && tResults.high == 0)
-			// {
-				// fprintf(fileptr, "[%d] ", getDynArr(segData, 0));
-			// }
-			// else 
-			// {
-				// for(i = 0; i < (tResults.high - tResults.low) + 1; i++)
-				// {
-					// if(i == 0)
-					// {
-						// fprintf(fileptr, "[%d, ", getDynArr(segData, (tResults.low + i)));
-					// }
-					// else if(i == (tResults.high - tResults.low))
-					// {
-						// fprintf(fileptr, "%d]", getDynArr(segData, (tResults.low + i)));
-					// }
-					// else
-					// {
-						// fprintf(fileptr, "%d, ", getDynArr(segData, (tResults.low + i)));
-					// }
-				// }
-			// }
-			
-			// // Add a new line and the sum
-			// fprintf(fileptr, "\nSum: %d\n\n", tResults.sum);
-		// }
-		
-		// Reset the internal indexes 
-		iStartIdx1 = iEndIdx1 = -99;
-			
 		// Close the file 
 		fclose(fileptr);		
 
+		// ADD THE OTHER ALGORITHMS HERE ***********************************************
+		
 		// Clean up the dynamic allocation
 		deleteDynArr(segData);
+		deleteDynArr(resultAr);
 		
 		// Set the start position
 		iStartIdx = iEndIdx + 1;

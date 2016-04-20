@@ -18,7 +18,7 @@
 // return as change and m the minimum number of coins it took. 
 
 //Brute force/Divide and Conquer
-DynArr * changeslow(DynArr *V,int A)
+DynArr * changeslow(DynArr *V, int A)
 {
 	// Local declares 
 	DynArr *C;
@@ -26,7 +26,11 @@ DynArr * changeslow(DynArr *V,int A)
 	C = createDynArr(sizeDynArr(V));	
 	
 	for(int i = 0; i < sizeDynArr(V); i++)
-		addDynArr(C, i);
+		addDynArr(C, i*3);
+	
+	for(int i = 0; i < 32767; i++)
+			for(int j = 0; j < 32000; j++)
+			{}
 	
 	return C;
 	

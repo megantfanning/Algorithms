@@ -92,7 +92,7 @@ int main (int argc, const char * argv[])
 		iResults = -99;
 		
 		// Call the correctness routine 
-		iResults = correctData(rawData, rawIdx, rawChange, outFile);
+		iResults = correctData(rawData, rawIdx, rawChange, outFile, argc);
 		
 		// Check the results of correctData call
 		if(iResults < 0)
