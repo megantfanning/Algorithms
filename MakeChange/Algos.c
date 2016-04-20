@@ -7,6 +7,8 @@
 *-------------------------------------------------------------------------*/
 
 #include<math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "dynamicArray.h"
 
 // Programs accept:
@@ -18,6 +20,12 @@
 // return as change and m the minimum number of coins it took. 
 
 //Brute force/Divide and Conquer
+//To make change for A cents:
+//If there is a K-cent coin, then that one coin is the minimum
+//Otherwise, for each value i < K,
+//Find the minimum number of coins needed to make i cents
+//Find the minimum number of coins needed to make K - i cents
+//Choose the i that minimizes this sum
 DynArr * changeslow(DynArr *V, int A)
 {
 	// Local declares 
@@ -33,39 +41,96 @@ DynArr * changeslow(DynArr *V, int A)
 			{}
 	
 	return C;
-	
-//To make change for A cents:
-//If there is a K-cent coin, then that one coin is the minimum
-//Otherwise, for each value i < K,
-//Find the minimum number of coins needed to make i cents
-//Find the minimum number of coins needed to make K - i cents
-//Choose the i that minimizes this sum
-
 }
 
-// //Greedy
-// int * changegreedy(int V[],int A){
+
+// Greedy
+DynArr * changegreedy(DynArr *V, int A)
+{
+	// Locals 
+	DynArr *MyCoins;
+    int i = 0;
+    int totalChange = 0;
+    int minCoins = 0;
+	
+	// Initialize return array
+	MyCoins = createDynArr(sizeDynArr(V));
+	for(i = 0; i < sizeDynArr(V); i++)
+	{
+		addDynArr(MyCoins, 0);
+	}
+
+	// Create indexer based on size of V
+	i = sizeDynArr(V) - 1;
+	
+    while(totalChange != A && i >= 0)
+	{
+        //Use the largest value coin possible.
+        if(getDynArr(V, i) > 0)
+		{
+            //check if the value of the coin to ensure we don't give too much change
+            if(getDynArr(V, i) + totalChange < A)
+			{
+				//increment the number of total coins used
+                minCoins++;
+				
+				// Increment the specific coin in the return array
+				putDynArr(MyCoins, i, getDynArr(MyCoins, i) + 1);
+			
+               // Increment the change counter 
+				totalChange = totalChange + getDynArr(V, i);	
+            }
+			else
+			{
+                //if the value of i is too great to make change decrease to smaller size coin denomination
+                i--;
+            }
+        }
+		else
+		{
+            i--;
+        }
+    }
+	
+	return MyCoins;
+}
+
+
+// Greedy
+// DynArr * changegreedy(DynArr *V,int A)
+// {
+	// // Locals 
     // int i=0;
     // int totalChange=0;
-    // int MyCoins[5]={0,0,0,0,0};//TODO fix
+    // //int MyCoins[5]={0,0,0,0,0};//TODO fix
+	// DynArr *MyCoins = createDynArr(5);
     // int minCoins=0;
-    // while(totalChange != A){
+	
+    // while(totalChange != A)
+	// {
         // //set i to length of the array
         // i=sizeof(V) / sizeof(V[0]);
+		
         // //Use the largest value coin possible.
-        // if(V[i] > 0){
+        // if(V[i] > 0)
+		// {
             // //check if the value of the coin to ensure we don't give too much change
-            // if( i+totalChange < A){
+            // if( i+totalChange < A)
+			// {
                 // coins= i + coins;
                 // V[i] = V[i]-1;
                 // minCoins++;//incriment the number of total coins used
                 // myCoins[i]=myCoins[i]+i;//incriment my array
                 // //Subtract the value from the amount of change to be made.
-            // }else{
+            // }
+			// else
+			// {
                 // //if the value of i is too great to make change decrease to smaller size coin denomination
                 // i--;
             // }
-        // }else{
+        // }
+		// else
+		// {
             // i--;
         // }
     // }

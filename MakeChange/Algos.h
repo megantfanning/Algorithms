@@ -22,7 +22,7 @@
 DynArr * changeslow(DynArr *V,int A);
 
 //Greedy
-//int * changegreedy(int V[],int A); 
+DynArr * changegreedy(DynArr *V,int A); 
 
 //Dynamic
 //int * changedp(int V[],int A);
