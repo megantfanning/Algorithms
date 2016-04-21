@@ -1,0 +1,220 @@
+Antonina (Toni) York
+OSU CS 325 Spring 2016
+Week 3 DP Homework Q2
+Test Walkthrough of Algorithm
+
+MINIMUM-COINS(A, values)
+    init array subproblems with A+1 entries all equal to 0
+    for i = 0 to A
+        count = i
+        for j = 0 to values.length - 1
+            if values[j] <= i
+                if subproblems[i-values[j]] + 1 < count
+                    count = subproblems[i-values[j]] + 1
+        subproblems[i] = count
+    return subproblems[A]
+
+
+call:	MINIMUM-COINS(11, [1, 3, 4])
+
+init:	subproblems = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+iteration 0....	i = 0, count = 0
+		iteration 0.1..........	j = 0, values[j] = 1, i-values[j] = -1
+					values[j] <= i NO
+					do not update count
+		iteration 0.2..........	j = 1, values[j] = 3, i-values[j] = -3
+					values[j] <= i NO
+					do not update count
+		iteration 0.3..........	j = 2, values[j] = 4, i-values[j] = -4
+					values[j] <= i NO
+					do not update count
+		subproblems[0] = 0
+
+now:	subproblems = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+iteration 1....	i = 1, count = 1
+		iteration 1.1..........	j = 0, values[j] = 1, i-values[j] = 0
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 1 < count NO
+					do not update count
+		iteration 1.2..........	j = 1, values[j] = 3, i-values[j] = -2
+					values[j] <= i NO
+					do not update count
+		iteration 1.3..........	j = 2, values[j] = 4, i-values[j] = -3
+					values[j] <= i NO
+					do not update count
+		subproblems[1] = 1
+
+now:	subproblems = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+iteration 2....	i = 2, count = 2
+		iteration 2.1..........	j = 0, values[j] = 1, i-values[j] = 1
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 2 < count NO
+					do not update count
+		iteration 2.2..........	j = 1, values[j] = 3, i-values[j] = -1
+					values[j] <= i NO
+					do not update count
+		iteration 2.3..........	j = 2, values[j] = 4, i-values[j] = -2
+					values[j] <= i NO
+					do not update count
+		subproblems[2] = 2
+
+now:	subproblems = [0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+iteration 3.... i = 3, count = 3
+		iteration 3.1..........	j = 0, values[j] = 1, i-values[j] = 2
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count NO
+					do not update count
+		iteration 3.2..........	j = 1, values[j] = 3, i-values[j] = 0
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 1 < count YES
+					count = 1
+		iteration 3.3..........	j = 2, values[j] = 4, i-values[j] = -1
+					values[j] <= i NO
+					do not update count
+		subproblems[3] = 1
+
+now:	subproblems = [0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+
+iteration 4.... i = 4, count = 4
+		iteration 4.1..........	j = 0, values[j] = 1, i-values[j] = 3
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 2 < count YES
+					count = 2
+		iteration 4.2..........	j = 1, values[j] = 3, i-values[j] = 1
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = s < count NO
+					do not update count
+		iteration 4.3..........	j = 2, values[j] = 4, i-values[j] = 0
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 1 < count YES
+					count = 1
+		subproblems[4] = 1
+
+now:	subproblems = [0, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+
+iteration 5.... i = 5, count = 5
+		iteration 5.1..........	j = 0, values[j] = 1, i-values[j] = 4
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 2 < count YES
+					count = 2
+		iteration 5.2..........	j = 1, values[j] = 3, i-values[j] = 2
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count NO
+					do not update count
+		iteration 5.3..........	j = 2, values[j] = 4, i-values[j] = 1
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 2 < count NO
+					do not update count
+		subproblems[5] = 2
+
+now:	subproblems = [0, 1, 2, 1, 1, 2, 0, 0, 0, 0, 0, 0]
+
+iteration 6.... i = 6, count = 6
+		iteration 6.1..........	j = 0, values[j] = 1, i-values[j] = 5
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count YES
+					count = 3
+		iteration 6.2..........	j = 1, values[j] = 3, i-values[j] = 3
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 2 < count YES
+					count = 2
+		iteration 6.3..........	j = 2, values[j] = 4, i-values[j] = 2
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count NO
+					do not update count
+		subproblems[6] = 2
+
+now:	subproblems = [0, 1, 2, 1, 1, 2, 2, 0, 0, 0, 0, 0]
+
+iteration 7.... i = 7, count = 7
+		iteration 7.1..........	j = 0, values[j] = 1, i-values[j] = 6
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count YES
+					count = 3
+		iteration 7.2..........	j = 1, values[j] = 3, i-values[j] = 4
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 2 < count YES
+					count = 2
+		iteration 7.3..........	j = 2, values[j] = 4, i-values[j] = 3
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 2 < count NO
+					do not update count
+		subproblems[7] = 2
+
+now:	subproblems = [0, 1, 2, 1, 1, 2, 2, 2, 0, 0, 0, 0]
+
+iteration 8.... i = 8, count = 8
+		iteration 8.1..........	j = 0, values[j] = 1, i-values[j] = 7
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count YES
+					count = 3
+		iteration 8.2..........	j = 1, values[j] = 3, i-values[j] = 5
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count NO
+					do not update count
+		iteration 8.3..........	j = 2, values[j] = 4, i-values[j] = 4
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 2 < count YES
+					count = 2
+		subproblems[8] = 2
+
+now:	subproblems = [0, 1, 2, 1, 1, 2, 2, 2, 2, 0, 0, 0]
+
+iteration 9.... i = 9, count = 9
+		iteration 9.1..........	j = 0, values[j] = 1, i-values[j] = 8
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count YES
+					count = 3
+		iteration 9.2..........	j = 1, values[j] = 3, i-values[j] = 6
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count NO
+					do not update count
+		iteration 9.3..........	j = 2, values[j] = 4, i-values[j] = 5
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count NO
+					do not update count
+		subproblems[9] = 3
+
+now:	subproblems = [0, 1, 2, 1, 1, 2, 2, 2, 2, 3, 0, 0]
+
+iteration 10... i = 10, count = 10
+		iteration 10.1.........	j = 0, values[j] = 1, i-values[j] = 9
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 4 < count YES
+					count = 4
+		iteration 10.2.........	j = 1, values[j] = 3, i-values[j] = 7
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count YES
+					count = 3
+		iteration 10.3.........	j = 2, values[j] = 4, i-values[j] = 6
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count NO
+					do not update count
+		subproblems[10] = 3
+
+now:	subproblems = [0, 1, 2, 1, 1, 2, 2, 2, 2, 3, 3, 0]
+
+iteration 11... i = 11, count = 11
+		iteration 11.1.........	j = 0, values[j] = 1, i-values[j] = 10
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 4 < count YES
+					count = 4
+		iteration 11.2.........	j = 1, values[j] = 3, i-values[j] = 8
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count YES
+					count = 3
+		iteration 11.3.........	j = 2, values[j] = 4, i-values[j] = 7
+					values[j] <= i YES
+					subproblems[i-values[j]] + 1 = 3 < count NO
+					do not update count
+		subproblems[11] = 3
+
+now:	subproblems = [0, 1, 2, 1, 1, 2, 2, 2, 2, 3, 3, 3]
+
+reutrn:	subproblems[11] = 3
+
+done!

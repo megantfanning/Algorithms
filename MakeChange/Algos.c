@@ -12,15 +12,10 @@
 
 //Algorithms return
 // The algorithm should return an array C where C[i] is the number of coins of value V[i] to return as change and m the minimum number of coins it took. 
+//if your coin values are [1, 5, 10, 25] then [1,1 ,0, 0] would be 1 penny and 1 nickel = 6 cents.  [6,0,0,0] would also be 6 cents but all six pennies.
 
 //Brute force/Divide and Conquer
 int * changeslow(int V[],int A){
-//To make change for A cents:
-//If there is a K-cent coin, then that one coin is the minimum
-//Otherwise, for each value i < K,
-//Find the minimum number of coins needed to make i cents
-//Find the minimum number of coins needed to make K - i cents
-//Choose the i that minimizes this sum
 
 }
 
