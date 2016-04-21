@@ -116,6 +116,7 @@ DynArr *changedp(DynArr *V, int A)
 	DynArr *SubProbs;
 	int i = 0;
 	int j = 0;
+	int currentCoin=0;
 	int iCount = -99;
 
 	// Initialize return array
@@ -158,43 +159,3 @@ DynArr *changedp(DynArr *V, int A)
 	// Send the results back
 	return MyCoins;
 }
-
-// Greedy
-// DynArr * changegreedy(DynArr *V,int A)
-// {
-	// // Locals 
-    // int i=0;
-    // int totalChange=0;
-    // //int MyCoins[5]={0,0,0,0,0};//TODO fix
-	// DynArr *MyCoins = createDynArr(5);
-    // int minCoins=0;
-	
-    // while(totalChange != A)
-	// {
-        // //set i to length of the array
-        // i=sizeof(V) / sizeof(V[0]);
-		
-        // //Use the largest value coin possible.
-        // if(V[i] > 0)
-		// {
-            // //check if the value of the coin to ensure we don't give too much change
-            // if( i+totalChange < A)
-			// {
-                // coins= i + coins;
-                // V[i] = V[i]-1;
-                // minCoins++;//incriment the number of total coins used
-                // myCoins[i]=myCoins[i]+i;//incriment my array
-                // //Subtract the value from the amount of change to be made.
-            // }
-			// else
-			// {
-                // //if the value of i is too great to make change decrease to smaller size coin denomination
-                // i--;
-            // }
-        // }
-		// else
-		// {
-            // i--;
-        // }
-    // }
-// }
