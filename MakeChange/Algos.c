@@ -28,47 +28,69 @@
 //Choose the i that minimizes this sum
 DynArr * changeslow(DynArr *V, int A)
 {
-	// // Locals 
-	// DynArr *MyCoins;
-	// int i = 0;
-	// int iRemaining = -99;
+	// Locals 
+	DynArr *MyCoins; // Return array of coin counts
+	DynArr *countsAr; // Array of counts for each i
+	DynArr *lower; // Return from lower half 
+	DynArr *upper; // Return from upper half
+	int i = 0;
+	int j = 0;
+	int iMin = 0; 
 	
-	// // Initialize iRemaining
-	// iRemaining = A;
+	// Initialize the dynamic arrays that are 
+	// the size of V
+	MyCoins = createDynArr(sizeDynArr(V));
+	lower = createDynArr(sizeDynArr(V));
+	upper = createDynArr(sizeDynArr(V));
+	for(i = 0; i < sizeDynArr(V); i++)
+	{
+		addDynArr(MyCoins, 0);
+		addDynArr(lower, 0);
+		addDynArr(upper, 0);
+	}
 	
-	// // Initialize return array
-	// MyCoins = createDynArr(sizeDynArr(V));
-	// for(i = 0; i < sizeDynArr(V); i++)
-		// addDynArr(MyCoins, 0);
+	// Initialize the array that is the size of A 
+	countsAr = createDynArr(A + 1);
+	for(i = 0; i < A + 1; i++)
+	{
+		addDynArr(countsAr, 0);
+	}
 	
-	// // Base case - zero ways to make change for 0 
-	// if(iRemaining <= 0)
-		// return 0;
+	// Base case check if the A value has a coin 
+	// exactly equal to its value 
+	for(i = 0; i < sizeDynArr(V); i++)
+	{
+		if(getDynArr(V, i) == A)
+		{
+			putDynArr(MyCoins, i, getDynArr(V, i) + 1);
+		}
+	}
 	
-	// // Loop through all the denominations and 
-	// // recursively call if possible. Possible 
-	// // meaning the amount remaining is greater
-	// // than the demonination
-	// for(i = 0; i < sizeDynArr(V); i++)
-	// {
-		// // Check if remaing greater
-		// if(iRemaining >= getDynArr(V, i))
-		// {
-			// MyCoins = changeslow(V, iRemaining - getDynArr(V, i));
-		// }
-	// }
+	// Loop through all i from 1 to A and recurse on 
+	// A - i and A 
+	for(i = 1; i < A + 1; i++)
+	{		
+		// Loop to pairwise sum the two
+		for(j = 0; j < sizeDynArr(V); j++)
+		{
+			putDynArr(MyCoins, j, getDynArr(lower, j) + getDynArr(upper, j));
+		}
+		
+		// Loop to get the sum of the coins in MyCoins just created
+		for(j = 0; j < sizeDynArr(MyCoins); j++)
+		{
+			putDynArr(countsAr, i, getDynArr(countsAr, i) + getDynArr(MyCoins, j));
+		}
+	}
 	
-	// Local declares 
-	DynArr *C;
-
-	C = createDynArr(sizeDynArr(V));	
+	// Find the minimum in the countsAr array 
+	for(i = 0; i < A + 1; i++)
+	{
+		if(iMin > getDynArr(countsAr, i))
+			iMin = i;
+	}
 	
-	for(int i = 0; i < sizeDynArr(V); i++)
-		addDynArr(C, i*3);
-	
-	for(int i = 0; i < 32767; i++){}
-	
-	return C;
+	return MyCoins;
 }
 
 // Greedy
