@@ -15,14 +15,6 @@
 // An array V where V[i] is the value of the coin of the ith denomination.
 // A value A which is the amount of change we are asked to make
 
-<<<<<<< HEAD
-//Algorithms return
-// The algorithm should return an array C where C[i] is the number of coins of value V[i] to return as change and m the minimum number of coins it took. 
-//if your coin values are [1, 5, 10, 25] then [1,1 ,0, 0] would be 1 penny and 1 nickel = 6 cents.  [6,0,0,0] would also be 6 cents but all six pennies.
-
-//Brute force/Divide and Conquer
-int * changeslow(int V[],int A){
-=======
 // Algorithms return:
 // The algorithm should return an array C where C[i] is the number of coins of value V[i] to 
 // return as change and m the minimum number of coins it took. 
@@ -68,7 +60,6 @@ DynArr * changeslow(DynArr *V, int A)
 	
 	// Local declares 
 	DynArr *C;
->>>>>>> 1a31e436ef8bafe03299dfb69eb7ed8644ac9011
 
 	C = createDynArr(sizeDynArr(V));	
 	
