@@ -179,7 +179,7 @@ DynArr *changedp(DynArr *V, int A)
 	
 	// Clean up 
 	deleteDynArr(SubProbs);
-	
+    MyCoints=currentCoin;//gets the best coin and returns it.	
 	// Send the results back
 	return MyCoins;
 }
