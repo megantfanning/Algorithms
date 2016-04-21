@@ -143,6 +143,8 @@ DynArr *changedp(DynArr *V, int A)
 					
 					// Increment the denomination counter
 					putDynArr(MyCoins, j, getDynArr(MyCoins, j) + 1);
+					//track current best coins
+					currentCoin=MyCoins;
 				}
 			}
 		}
