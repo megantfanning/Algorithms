@@ -26,74 +26,79 @@
 //Find the minimum number of coins needed to make i cents
 //Find the minimum number of coins needed to make K - i cents
 //Choose the i that minimizes this sum
+
+// Method taken from:
+// http://www.cis.upenn.edu/~matuszek/cit594-2014/Lectures/30-dynamic-programming.ppt
 DynArr * changeslow(DynArr *V, int A)
 {
-	// Locals 
-	DynArr *MyCoins; // Return array of coin counts
-	DynArr *countsAr; // Array of counts for each i
-	DynArr *lower; // Return from lower half 
-	DynArr *upper; // Return from upper half
-	int i = 0;
-	int j = 0;
-	int iMin = 0; 
+	// Local declares 
+	DynArr *finalSol; // Final
+	DynArr *tempSol1; // First subproblem
+	DynArr *tempSol2; // Second subproblem
+	int i, j; // Indexers
+	int iDenomCount  = sizeDynArr(V);
+	int iNewCount;
+	int iMinCount = 9392;
 	
-	// Initialize the dynamic arrays that are 
-	// the size of V
-	MyCoins = createDynArr(sizeDynArr(V));
-	lower = createDynArr(sizeDynArr(V));
-	upper = createDynArr(sizeDynArr(V));
-	for(i = 0; i < sizeDynArr(V); i++)
+	// Init the dynamic solution arrays
+	finalSol = createDynArr(iDenomCount);
+	tempSol1 = createDynArr(iDenomCount);
+	tempSol2 = createDynArr(iDenomCount);
+	for(i = 0; i < iDenomCount; i++)
 	{
-		addDynArr(MyCoins, 0);
-		addDynArr(lower, 0);
-		addDynArr(upper, 0);
+		addDynArr(finalSol, 0);
+		addDynArr(tempSol1, 0);
+		addDynArr(tempSol2, 0);
+		
 	}
 	
-	// Initialize the array that is the size of A 
-	countsAr = createDynArr(A + 1);
-	for(i = 0; i < A + 1; i++)
+	// Loop to check for the base case
+	for(i = 0; i < iDenomCount; i++)
 	{
-		addDynArr(countsAr, 0);
-	}
-	
-	// Base case check if the A value has a coin 
-	// exactly equal to its value 
-	for(i = 0; i < sizeDynArr(V); i++)
-	{
+		// Check if a coin matches the value being checked for
 		if(getDynArr(V, i) == A)
 		{
-			putDynArr(MyCoins, i, getDynArr(V, i) + 1);
+			putDynArr(finalSol, i, 1);
+			return finalSol;
 		}
 	}
-	
-	// Loop through all i from 1 to A and recurse on 
-	// A - i and A 
-	for(i = 1; i < A + 1; i++)
-	{		
-		// Loop to pairwise sum the two
-		for(j = 0; j < sizeDynArr(V); j++)
+
+	// Loop through all values up to n 
+	for(i = 1; i < A; i++)
+	{
+		// Get the sub solutions 
+		tempSol1 = changeslow(V, i);
+		tempSol2 = changeslow(V, A - i);
+		
+		// Sum the total coins used for both sub solutions 
+		iNewCount = 0;
+		for(j = 0; j < iDenomCount; j++)
 		{
-			putDynArr(MyCoins, j, getDynArr(lower, j) + getDynArr(upper, j));
+			// Place the total coins in temp variable
+			iNewCount = iNewCount + getDynArr(tempSol1, j) + getDynArr(tempSol2, j);
 		}
 		
-		// Loop to get the sum of the coins in MyCoins just created
-		for(j = 0; j < sizeDynArr(MyCoins); j++)
+		// Compare the new coin count to the previous best 
+		if(iNewCount < iMinCount)
 		{
-			putDynArr(countsAr, i, getDynArr(countsAr, i) + getDynArr(MyCoins, j));
+			// Set the new best 
+			iMinCount = iNewCount;
+			
+			// Index wise sum the sub solutions to get the full solution
+			for(j = 0; j < iDenomCount; j++)
+			{
+				putDynArr(finalSol, j, getDynArr(tempSol1, j) + getDynArr(tempSol2, j));
+			}
 		}
 	}
 	
-	// Find the minimum in the countsAr array 
-	for(i = 0; i < A + 1; i++)
-	{
-		if(iMin > getDynArr(countsAr, i))
-			iMin = i;
-	}
-	
-	return MyCoins;
+	// Return the best case solution
+	return finalSol;
 }
 
-// Greedy
+// Greedy - choose the max coin size that is less than
+//			the current change required. Make this selection
+//			repeatedly using a loop structure.
 DynArr * changegreedy(DynArr *V, int A)
 {
 	// Locals 
@@ -174,12 +179,12 @@ DynArr *changedp(DynArr *V, int A)
 		putDynArr(SubProbs, i, iCount);
 	}
 	
-	for(i = 0; i < sizeDynArr(V); i++)
-		printf("%d ", getDynArr(MyCoins, i));
+	// for(i = 0; i < sizeDynArr(V); i++)
+		// printf("%d ", getDynArr(MyCoins, i));
 	
 	// Clean up 
 	deleteDynArr(SubProbs);
-    MyCoints=currentCoin;//gets the best coin and returns it.	
+    MyCoins=currentCoin;//gets the best coin and returns it.	
 	// Send the results back
 	return MyCoins;
 }
