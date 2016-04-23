@@ -59,6 +59,8 @@ DynArr * changeslow(DynArr *V, int A)
 		if(getDynArr(V, i) == A)
 		{
 			putDynArr(finalSol, i, 1);
+			deleteDynArr(tempSol1);
+			deleteDynArr(tempSol2);
 			return finalSol;
 		}
 	}
@@ -93,6 +95,8 @@ DynArr * changeslow(DynArr *V, int A)
 	}
 	
 	// Return the best case solution
+	deleteDynArr(tempSol1);
+	deleteDynArr(tempSol2);
 	return finalSol;
 }
 
