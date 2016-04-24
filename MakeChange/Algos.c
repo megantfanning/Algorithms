@@ -144,10 +144,11 @@ DynArr *changedp(DynArr *V, int A)
 {
 		// Locals 
 	DynArr *MyCoins;
+	DynArr *TempCoins;
 	DynArr *SubProbs;
 	int i = 0;
 	int j = 0;
-	int currentCoin=0;
+	// int currentCoin = 0;
 	int iCount = -99;
 
 	// Initialize return array
@@ -157,8 +158,12 @@ DynArr *changedp(DynArr *V, int A)
 	
 	// Initialize the subproblem array 
 	SubProbs = createDynArr(A + 1);
+	TempCoins = createDynArr(A + 1);
 	for(i = 0; i < A + 1; i++)
+	{
+		addDynArr(TempCoins, 0);
 		addDynArr(SubProbs, 0);
+	}
 	
 	// Loop to fill in the table 
 	for(i = 0; i < A + 1; i++)
@@ -170,25 +175,40 @@ DynArr *changedp(DynArr *V, int A)
 			{
 				if(getDynArr(SubProbs, i - getDynArr(V, j)) + 1 < iCount)
 				{
+					// Modify the new count
 					iCount = getDynArr(SubProbs, i - getDynArr(V, j)) + 1;
 					
 					// Increment the denomination counter
-					putDynArr(MyCoins, j, getDynArr(MyCoins, j) + 1);
-					//track current best coins
-					currentCoin=MyCoins;
+					putDynArr(TempCoins, i, getDynArr(V, j));
 				}
 			}
 		}
 		
+		// Insert the current count for that change 
+		// amount into the count array for future compares
 		putDynArr(SubProbs, i, iCount);
 	}
 	
-	// for(i = 0; i < sizeDynArr(V); i++)
-		// printf("%d ", getDynArr(MyCoins, i));
+	// Walk back the temp coins array into the final 
+	// return array 
+	int b = A;
+	while(b > 0)
+	{
+		// Loop to see if the coin is in the denom list
+		for(i = 0; i < sizeDynArr(V); i++)
+		{
+			if(getDynArr(TempCoins, b) == getDynArr(V, i))
+				putDynArr(MyCoins, i, getDynArr(MyCoins, i) + 1);
+		}
+		
+		// Decrement the temp coins array 
+		b = b - getDynArr(TempCoins, b);
+	}
 	
 	// Clean up 
 	deleteDynArr(SubProbs);
-    MyCoins=currentCoin;//gets the best coin and returns it.	
+	deleteDynArr(TempCoins);
+	
 	// Send the results back
 	return MyCoins;
 }
