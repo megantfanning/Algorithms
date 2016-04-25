@@ -161,9 +161,15 @@ DynArr *changedp(DynArr *V, int A)
 		iCount = i;
 		for(j = 0; j < sizeDynArr(V); j++)
 		{
+			// If coin is denom is less than or equal to current amount
 			if(getDynArr(V, j) <= i)
 			{
-				if(getDynArr(SubProbs, i - getDynArr(V, j)) + 1 < iCount)
+				// If coin count for subproblem of current amount less
+				// current coin + 1 for the coin 
+				// ID modified the < to <= on 04/25/2016 to deal with 
+				// inability to process cases where only one coin type 
+				// is the solution
+				if(getDynArr(SubProbs, i - getDynArr(V, j)) + 1 <= iCount)
 				{
 					// Modify the new count
 					iCount = getDynArr(SubProbs, i - getDynArr(V, j)) + 1;
@@ -190,7 +196,7 @@ DynArr *changedp(DynArr *V, int A)
 			if(getDynArr(TempCoins, b) == getDynArr(V, i))
 				putDynArr(MyCoins, i, getDynArr(MyCoins, i) + 1);
 		}
-		
+				
 		// Decrement the temp coins array 
 		b = b - getDynArr(TempCoins, b);
 	}

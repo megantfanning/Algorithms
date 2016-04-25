@@ -208,7 +208,7 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 		
 		// Pass to the changeslow algorithm only if change less than
 		// maximum threshold 
-		if(getDynArr(rawChange, iGlIdx) > 20)
+		if(getDynArr(rawChange, iGlIdx) > 18)
 		{
 			// Fill the result array with garbage
 			resultAr = createDynArr(sizeDynArr(segData));
