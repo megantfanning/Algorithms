@@ -31,7 +31,8 @@ the name of the file containing the input data.
 
 Notes:
 1) changeslow algorithm runs very slow and should not be tested for A
-values greater than 20. 
+values greater than 20. If A values greater than 20 are input the program 
+will simply bypass the algorithm and output all 0's. 
 2) The input file must be of the form:
 [1, ..... n]
 A

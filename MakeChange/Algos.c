@@ -17,18 +17,9 @@
 
 // Algorithms return:
 // The algorithm should return an array C where C[i] is the number of coins of value V[i] to 
-// return as change and m the minimum number of coins it took. 
+// return as change. 
 
 //Brute force/Divide and Conquer
-//To make change for A cents:
-//If there is a K-cent coin, then that one coin is the minimum
-//Otherwise, for each value i < K,
-//Find the minimum number of coins needed to make i cents
-//Find the minimum number of coins needed to make K - i cents
-//Choose the i that minimizes this sum
-
-// Method taken from:
-// http://www.cis.upenn.edu/~matuszek/cit594-2014/Lectures/30-dynamic-programming.ppt
 DynArr * changeslow(DynArr *V, int A)
 {
 	// Local declares 
@@ -38,7 +29,7 @@ DynArr * changeslow(DynArr *V, int A)
 	int i, j; // Indexers
 	int iDenomCount  = sizeDynArr(V);
 	int iNewCount;
-	int iMinCount = 9392;
+	int iMinCount = 2147483647;
 	
 	// Init the dynamic solution arrays
 	finalSol = createDynArr(iDenomCount);
@@ -49,7 +40,6 @@ DynArr * changeslow(DynArr *V, int A)
 		addDynArr(finalSol, 0);
 		addDynArr(tempSol1, 0);
 		addDynArr(tempSol2, 0);
-		
 	}
 	
 	// Loop to check for the base case

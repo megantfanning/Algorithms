@@ -170,8 +170,8 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 								const char *bufFile, int iTimerFlag)
 {
 	// Local declares 
-	clock_t cStart, cEnd;
-	double dDuration = -99;
+	// clock_t cStart, cEnd;
+	// double dDuration = -99;
 	DynArr *segData; // Segment of data that is reused and passed to each algo
 	DynArr *resultAr; // Dynamic array pointer returned from algorithms 
 	FILE *fileptr;
@@ -206,8 +206,21 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 		// cStart = clock();
 		tvStart = GetTimeStamp();
 		
-		// Pass to the changeslow algorithm
-		resultAr = changeslow(segData, getDynArr(rawChange, iGlIdx));
+		// Pass to the changeslow algorithm only if change less than
+		// maximum threshold 
+		if(getDynArr(rawChange, iGlIdx) > 1)
+		{
+			// Fill the result array with garbage
+			resultAr = createDynArr(sizeDynArr(segData));
+			for(i = 0; i < sizeDynArr(segData); i++)
+			{
+				addDynArr(resultAr, 0);
+			}
+		}
+		else 
+		{
+			resultAr = changeslow(segData, getDynArr(rawChange, iGlIdx));
+		}
 		
 		// Get the time delta 
 		// cEnd = clock();
@@ -216,7 +229,7 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 		// dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
 		// dDuration = (double)(cEnd - cStart);
 		lDuration = (1000000 * tvEnd.tv_sec + tvEnd.tv_usec) -
-			(1000000 * tvStart.tv_sec + tvStart.tv_usec);
+					(1000000 * tvStart.tv_sec + tvStart.tv_usec);
 	
 		// Open the file again in append mode
 		fileptr = fopen(bufFile, "a");
