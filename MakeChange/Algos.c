@@ -17,83 +17,82 @@
 
 // Algorithms return:
 // The algorithm should return an array C where C[i] is the number of coins of value V[i] to 
-// return as change and m the minimum number of coins it took. 
+// return as change. 
 
 //Brute force/Divide and Conquer
-//To make change for A cents:
-//If there is a K-cent coin, then that one coin is the minimum
-//Otherwise, for each value i < K,
-//Find the minimum number of coins needed to make i cents
-//Find the minimum number of coins needed to make K - i cents
-//Choose the i that minimizes this sum
 DynArr * changeslow(DynArr *V, int A)
 {
-	// Locals 
-	DynArr *MyCoins; // Return array of coin counts
-	DynArr *countsAr; // Array of counts for each i
-	DynArr *lower; // Return from lower half 
-	DynArr *upper; // Return from upper half
-	int i = 0;
-	int j = 0;
-	int iMin = 0; 
+	// Local declares 
+	DynArr *finalSol; // Final
+	DynArr *tempSol1; // First subproblem
+	DynArr *tempSol2; // Second subproblem
+	int i, j; // Indexers
+	int iDenomCount  = sizeDynArr(V);
+	int iNewCount;
+	int iMinCount = 2147483647;
 	
-	// Initialize the dynamic arrays that are 
-	// the size of V
-	MyCoins = createDynArr(sizeDynArr(V));
-	lower = createDynArr(sizeDynArr(V));
-	upper = createDynArr(sizeDynArr(V));
-	for(i = 0; i < sizeDynArr(V); i++)
+	// Init the dynamic solution arrays
+	finalSol = createDynArr(iDenomCount);
+	tempSol1 = createDynArr(iDenomCount);
+	tempSol2 = createDynArr(iDenomCount);
+	for(i = 0; i < iDenomCount; i++)
 	{
-		addDynArr(MyCoins, 0);
-		addDynArr(lower, 0);
-		addDynArr(upper, 0);
+		addDynArr(finalSol, 0);
+		addDynArr(tempSol1, 0);
+		addDynArr(tempSol2, 0);
 	}
 	
-	// Initialize the array that is the size of A 
-	countsAr = createDynArr(A + 1);
-	for(i = 0; i < A + 1; i++)
+	// Loop to check for the base case
+	for(i = 0; i < iDenomCount; i++)
 	{
-		addDynArr(countsAr, 0);
-	}
-	
-	// Base case check if the A value has a coin 
-	// exactly equal to its value 
-	for(i = 0; i < sizeDynArr(V); i++)
-	{
+		// Check if a coin matches the value being checked for
 		if(getDynArr(V, i) == A)
 		{
-			putDynArr(MyCoins, i, getDynArr(V, i) + 1);
+			putDynArr(finalSol, i, 1);
+			deleteDynArr(tempSol1);
+			deleteDynArr(tempSol2);
+			return finalSol;
 		}
 	}
-	
-	// Loop through all i from 1 to A and recurse on 
-	// A - i and A 
-	for(i = 1; i < A + 1; i++)
-	{		
-		// Loop to pairwise sum the two
-		for(j = 0; j < sizeDynArr(V); j++)
+
+	// Loop through all values up to n 
+	for(i = 1; i < A; i++)
+	{
+		// Get the sub solutions 
+		tempSol1 = changeslow(V, i);
+		tempSol2 = changeslow(V, A - i);
+		
+		// Sum the total coins used for both sub solutions 
+		iNewCount = 0;
+		for(j = 0; j < iDenomCount; j++)
 		{
-			putDynArr(MyCoins, j, getDynArr(lower, j) + getDynArr(upper, j));
+			// Place the total coins in temp variable
+			iNewCount = iNewCount + getDynArr(tempSol1, j) + getDynArr(tempSol2, j);
 		}
 		
-		// Loop to get the sum of the coins in MyCoins just created
-		for(j = 0; j < sizeDynArr(MyCoins); j++)
+		// Compare the new coin count to the previous best 
+		if(iNewCount < iMinCount)
 		{
-			putDynArr(countsAr, i, getDynArr(countsAr, i) + getDynArr(MyCoins, j));
+			// Set the new best 
+			iMinCount = iNewCount;
+			
+			// Index wise sum the sub solutions to get the full solution
+			for(j = 0; j < iDenomCount; j++)
+			{
+				putDynArr(finalSol, j, getDynArr(tempSol1, j) + getDynArr(tempSol2, j));
+			}
 		}
 	}
 	
-	// Find the minimum in the countsAr array 
-	for(i = 0; i < A + 1; i++)
-	{
-		if(iMin > getDynArr(countsAr, i))
-			iMin = i;
-	}
-	
-	return MyCoins;
+	// Return the best case solution
+	deleteDynArr(tempSol1);
+	deleteDynArr(tempSol2);
+	return finalSol;
 }
 
-// Greedy
+// Greedy - choose the max coin size that is less than
+//			the current change required. Make this selection
+//			repeatedly using a loop structure.
 DynArr * changegreedy(DynArr *V, int A)
 {
 	// Locals 
@@ -135,10 +134,11 @@ DynArr *changedp(DynArr *V, int A)
 {
 		// Locals 
 	DynArr *MyCoins;
+	DynArr *TempCoins;
 	DynArr *SubProbs;
 	int i = 0;
 	int j = 0;
-	int currentCoin=0;
+	// int currentCoin = 0;
 	int iCount = -99;
 
 	// Initialize return array
@@ -148,8 +148,12 @@ DynArr *changedp(DynArr *V, int A)
 	
 	// Initialize the subproblem array 
 	SubProbs = createDynArr(A + 1);
+	TempCoins = createDynArr(A + 1);
 	for(i = 0; i < A + 1; i++)
+	{
+		addDynArr(TempCoins, 0);
 		addDynArr(SubProbs, 0);
+	}
 	
 	// Loop to fill in the table 
 	for(i = 0; i < A + 1; i++)
@@ -157,29 +161,50 @@ DynArr *changedp(DynArr *V, int A)
 		iCount = i;
 		for(j = 0; j < sizeDynArr(V); j++)
 		{
+			// If coin is denom is less than or equal to current amount
 			if(getDynArr(V, j) <= i)
 			{
-				if(getDynArr(SubProbs, i - getDynArr(V, j)) + 1 < iCount)
+				// If coin count for subproblem of current amount less
+				// current coin + 1 for the coin 
+				// ID modified the < to <= on 04/25/2016 to deal with 
+				// inability to process cases where only one coin type 
+				// is the solution
+				if(getDynArr(SubProbs, i - getDynArr(V, j)) + 1 <= iCount)
 				{
+					// Modify the new count
 					iCount = getDynArr(SubProbs, i - getDynArr(V, j)) + 1;
 					
 					// Increment the denomination counter
-					putDynArr(MyCoins, j, getDynArr(MyCoins, j) + 1);
-					//track current best coins
-					currentCoin=MyCoins;
+					putDynArr(TempCoins, i, getDynArr(V, j));
 				}
 			}
 		}
 		
+		// Insert the current count for that change 
+		// amount into the count array for future compares
 		putDynArr(SubProbs, i, iCount);
 	}
 	
-	for(i = 0; i < sizeDynArr(V); i++)
-		printf("%d ", getDynArr(MyCoins, i));
+	// Walk back the temp coins array into the final 
+	// return array 
+	int b = A;
+	while(b > 0)
+	{
+		// Loop to see if the coin is in the denom list
+		for(i = 0; i < sizeDynArr(V); i++)
+		{
+			if(getDynArr(TempCoins, b) == getDynArr(V, i))
+				putDynArr(MyCoins, i, getDynArr(MyCoins, i) + 1);
+		}
+				
+		// Decrement the temp coins array 
+		b = b - getDynArr(TempCoins, b);
+	}
 	
 	// Clean up 
 	deleteDynArr(SubProbs);
-    MyCoints=currentCoin;//gets the best coin and returns it.	
+	deleteDynArr(TempCoins);
+	
 	// Send the results back
 	return MyCoins;
 }

@@ -9,9 +9,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <sys/time.h>
 #include "UserInt.h"
 #include "dynamicArray.h"
 #include "Algos.h"
+
+// Struct supporting nano timestamps
+struct timeval GetTimeStamp() 
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv;
+}
 
 // Get the current word / number from a file stream
 char* getWord(FILE *file, int *iFlag)
@@ -161,8 +170,8 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 								const char *bufFile, int iTimerFlag)
 {
 	// Local declares 
-	clock_t cStart, cEnd;
-	double dDuration = -99;
+	// clock_t cStart, cEnd;
+	// double dDuration = -99;
 	DynArr *segData; // Segment of data that is reused and passed to each algo
 	DynArr *resultAr; // Dynamic array pointer returned from algorithms 
 	FILE *fileptr;
@@ -170,6 +179,9 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 	int iGlIdx; // Global reusable indexer
 	int iEndIdx; // Ending index
 	int iSumCoins = -99; // Sum of coins used 
+	struct timeval tvStart;
+	struct timeval tvEnd;
+	unsigned long lDuration = -99;
 		
 	// Get the subarrays from the large array and then pass 
 	// to each of the algos and write to file in this loop
@@ -191,14 +203,33 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 		
 		/* changeslow --------------------------------------- */
 		// Get the current time 
-		cStart = clock();
+		// cStart = clock();
+		tvStart = GetTimeStamp();
 		
-		// Pass to the changeslow algorithm
-		resultAr = changeslow(segData, getDynArr(rawChange, iGlIdx));
+		// Pass to the changeslow algorithm only if change less than
+		// maximum threshold 
+		if(getDynArr(rawChange, iGlIdx) > 18)
+		{
+			// Fill the result array with garbage
+			resultAr = createDynArr(sizeDynArr(segData));
+			for(i = 0; i < sizeDynArr(segData); i++)
+			{
+				addDynArr(resultAr, 0);
+			}
+		}
+		else 
+		{
+			resultAr = changeslow(segData, getDynArr(rawChange, iGlIdx));
+		}
 		
 		// Get the time delta 
-		cEnd = clock();
-		dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
+		// cEnd = clock();
+		tvEnd = GetTimeStamp();
+		
+		// dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
+		// dDuration = (double)(cEnd - cStart);
+		lDuration = (1000000 * tvEnd.tv_sec + tvEnd.tv_usec) -
+					(1000000 * tvStart.tv_sec + tvStart.tv_usec);
 	
 		// Open the file again in append mode
 		fileptr = fopen(bufFile, "a");
@@ -241,7 +272,7 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 			// Print the time if needed
 			if(iTimerFlag == 3)
 			{
-				printf("%s: %d %f\n", "changeslow", iSumCoins, dDuration);
+				printf("%s: %d %lu\n", "changeslow", iSumCoins, lDuration);
 			}
 		}
 		
@@ -260,14 +291,20 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 
 		/* GREEDY --------------------------------------- */
 		// Get the current time 
-		cStart = clock();
+		// cStart = clock();
+		tvStart = GetTimeStamp();
 		
 		// Pass to the changeslow algorithm
 		resultAr = changegreedy(segData, getDynArr(rawChange, iGlIdx));
 		
 		// Get the time delta 
-		cEnd = clock();
-		dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
+		// cEnd = clock();
+		tvEnd = GetTimeStamp();
+		
+		// dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
+		// dDuration = (double)(cEnd - cStart);
+		lDuration = (1000000 * tvEnd.tv_sec + tvEnd.tv_usec) -
+					(1000000 * tvStart.tv_sec + tvStart.tv_usec);
 	
 		// Open the file again in append mode
 		fileptr = fopen(bufFile, "a");
@@ -310,7 +347,7 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 			// Print the time if needed
 			if(iTimerFlag == 3)
 			{
-				printf("%s: %d %f\n", "changegreedy", iSumCoins, dDuration);
+				printf("%s: %d %lu\n", "changegreedy", iSumCoins, lDuration);
 			}
 		}
 		
@@ -329,14 +366,20 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 		
 		/* DYNAMIC PROGRAMMING --------------------------------------- */
 		// Get the current time 
-		cStart = clock();
+		// cStart = clock();
+		tvStart = GetTimeStamp();
 		
 		// Pass to the changeslow algorithm
 		resultAr = changedp(segData, getDynArr(rawChange, iGlIdx));
 		
 		// Get the time delta 
-		cEnd = clock();
-		dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
+		// cEnd = clock();
+		tvEnd = GetTimeStamp();
+		
+		// dDuration = (double)(cEnd - cStart) / CLOCKS_PER_SEC;
+		// dDuration = (double)(cEnd - cStart);
+		lDuration = (1000000 * tvEnd.tv_sec + tvEnd.tv_usec) -
+				(1000000 * tvStart.tv_sec + tvStart.tv_usec);
 	
 		// Open the file again in append mode
 		fileptr = fopen(bufFile, "a");
@@ -379,7 +422,7 @@ int correctData(DynArr *rawData, DynArr *rawIdx, DynArr *rawChange,
 			// Print the time if needed
 			if(iTimerFlag == 3)
 			{
-				printf("%s: %d %f\n", "changedp", iSumCoins, dDuration);
+				printf("%s: %d %lu\n", "changedp", iSumCoins, lDuration);
 			}
 		}
 		
