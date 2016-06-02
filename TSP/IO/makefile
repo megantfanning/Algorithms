@@ -7,7 +7,7 @@ UserInt.o: UserInt.c UserInt.h
 	gcc -Wall -std=c99 -c UserInt.c	
 
 TSP: Algos.o UserInt.o Main.c
-	gcc -Wall -std=c99 -o TSP Algos.o UserInt.o Main.c 
+	gcc -Wall -std=c99 -lm -o TSP Algos.o UserInt.o Main.c 
 		
 clean:
 	rm userInt.o
