@@ -31,6 +31,8 @@ int NearestNeightbor(struct structCity *cityList,struct structCity *visitedCitie
     visitedCities[counter]=cityList[start];
     counter++;
     struct structCity currentCity=cityList[0];//first vertex
+    int minimumDistance=-999;
+    int distance=-999;
 
     //if all the vertices in domain are visited, then terminate.
     while(counter<size){
@@ -38,8 +40,6 @@ int NearestNeightbor(struct structCity *cityList,struct structCity *visitedCitie
         //and an unvisited vertex V (the closest neighbor.
         //set current vertex to V.
         struct structCity V;
-        int minimumDistance=-999;
-        int distance=-999;
 
         for(int i=0; i<size;i++){
             //get the distance between city & neighbor
@@ -49,7 +49,7 @@ int NearestNeightbor(struct structCity *cityList,struct structCity *visitedCitie
                 for(int j=0;j<counter;j++){
                     if(cityList[i].iId == visitedCities[j].iId){
                         //city have been visited.
-                        return -1;//TODO this error needs to be handled.
+                        return -1;//return error.
                     }
                 }
                 minimumDistance=distance;

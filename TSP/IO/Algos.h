@@ -20,5 +20,8 @@
 // being the cities in the order they are to be visited.
 // The size parameter is the number of cities.
 int resultTSP(struct structCity *input, int *output, int size);
+int NearestNeightbor(struct structCity *cityList,struct structCity *visitedCities, int size,int start);
+int getDistance(struct structCity A, struct structCity B);
+
 
 #endif
