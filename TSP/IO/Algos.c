@@ -22,46 +22,46 @@ int getDistance(struct structCity A, struct structCity B){
     return myDistance;
 }
 
-//Create a list of all neighboring Cities and then find the closest neighbor
-struct structCity findNeighbors(struct structCity currentCity, int max){
-    //TODO
-    //make a list of all adjcent cities
-    struct structCity cityList[max];
 
-    int numberOfNeighbors=0;
-    //create a array to store distances
-    int distances[numberOfNeighbors];
- 
-    for(int i=0; i<max;i++){
-        //get the distance between city and neighbor then store to an array
-        distances[i]=getDistance(currentCity, cityList[i]);
-    }
-    //compare ints in array to find smallest one? 
-    //TODO make comparison more effective. 
-    struct structCity nearestNeighbor;
-    return nearestNeighbor;
-}
-
-int NearestNeightbor(struct structCity *input, int *output, int size){
-    int counter=0;
+int NearestNeightbor(struct structCity *cityList, int *output, int size){
     //create an array for visited cities
     struct structCity visitedCities[size];
     //bzero(visitedCities);TODO
+    int counter=0;
 
     //start on an arbitrary vertex as current vertex.
-    visitedCities[counter]=input[0];
+    visitedCities[counter]=cityList[0];
     counter++;
-    
+    struct structCity currentCity=cityList[0];//first vertex
+
     //if all the vertices in domain are visited, then terminate.
     while(counter<size){
-        //TODO 10 is a dummy value
-        int maxNeighbors=10;//maximum number of neighbors used to initialze list size
         //find out the shortest edge connecting current vertex 
-        //and an unvisited vertex V.set current vertex to V.
-        struct structCity V=findNeighbors(input[0],maxNeighbors);    
-        //mark V as visited.
+        //and an unvisited vertex V (the closest neighbor.
+        //set current vertex to V.
+        struct structCity V;
+        int minimumDistance=-999;
+        int distance=-999;
+
+        for(int i=0; i<size;i++){
+            //get the distance between city & neighbor
+            distance=getDistance(currentCity, cityList[i]);
+            if(distance<minimumDistance){
+                //check if cityList[i] has been visited
+                for(int j=0;j<counter;j++){
+                    if(cityList[i].iId == visitedCities[j].iId){
+                        //city have been visited.
+                        return 1;//TODO this error needs to be handled.
+                    }
+                }
+                minimumDistance=distance;
+                V=cityList[i];
+            }
+        } 
+        //mark V as visited, incriment counter
         visitedCities[counter]=V;
         counter++;
+        currentCity=V;
     }
     return 0;
 }
