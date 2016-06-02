@@ -23,11 +23,9 @@ int getDistance(struct structCity A, struct structCity B){
 }
 
 
-int NearestNeightbor(struct structCity *cityList, int *output, int size){
-    //create an array for visited cities
-    struct structCity visitedCities[size];
-    //bzero(visitedCities);TODO
+int NearestNeightbor(struct structCity *cityList,struct structCity *visitedCities, int size){
     int counter=0;
+    int totalDistance=0;
 
     //start on an arbitrary vertex as current vertex.
     visitedCities[counter]=cityList[0];
@@ -51,7 +49,7 @@ int NearestNeightbor(struct structCity *cityList, int *output, int size){
                 for(int j=0;j<counter;j++){
                     if(cityList[i].iId == visitedCities[j].iId){
                         //city have been visited.
-                        return 1;//TODO this error needs to be handled.
+                        return -1;//TODO this error needs to be handled.
                     }
                 }
                 minimumDistance=distance;
@@ -60,31 +58,42 @@ int NearestNeightbor(struct structCity *cityList, int *output, int size){
         } 
         //mark V as visited, incriment counter
         visitedCities[counter]=V;
+        totalDistance=minimumDistance;
         counter++;
         currentCity=V;
     }
-    return 0;
+    
+    return totalDistance;
 }
 
 // Algorithm to get the shortest round trip for the 
 // input array passed in. The algorithm should populate 
 // the output array that is passed in with the first row 
-// being the total distance and then the subseuent rows 
+// being the total distance and then the subsequent rows 
 // being the cities in the order they are to be visited, The 
 // size parameter is the number of cities.
 int resultTSP(struct structCity *input, int *output, int size)
 {
+    //create an array for visited cities
+    struct structCity visitedCities[size];
+    //TODO zero out visitedCities
+    int totalDistance=NearestNeightbor(input,visitedCities,size);
+
+    printf("totalDistance %d",totalDistance);
+
 	// Dummy populate the result array 
 	for(int i = 0; i < size + 1; i++)
 	{
-		if(i == 0)
+        printf("%d, ",visitedCities[i].iId);
+        
+		/*if(i == 0)
 		{
 			output[0] = 78932;
 		}
 		else 
 		{
 			output[i] = input[i - 1].iY;
-		}
+		}*/
 	}
 	
 	return 0;
