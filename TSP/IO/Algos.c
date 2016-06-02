@@ -110,7 +110,7 @@ int resultTSP(struct structCity *input, int *output, int size)
 {
 	// Local declares
 	int iStartNode = 0; // Starting node 
-	struct structCity visitedCities[size + 1]; // Put the size in the first index
+	struct structCity visitedCities[size + 1]; //Put the size in the first index
 	int iTotalDist = -999; // Total distance traveled
 	int i = -999; // Global indexer
 	
@@ -131,13 +131,6 @@ int resultTSP(struct structCity *input, int *output, int size)
 		iTotalDist = iTotalDist + NearestNeighbor(input, visitedCities, size, 
 					visitedCities[visitedCities[0].iId].iId);
 	}
-
-	// printf("%d %d %d\n %d %d %d\n %d %d %d\n %d %d %d\n %d %d %d \n", 
-			// visitedCities[0].iId, visitedCities[0].iX, visitedCities[0].iY,
-			// visitedCities[1].iId, visitedCities[1].iX, visitedCities[1].iY,
-			// visitedCities[2].iId, visitedCities[2].iX, visitedCities[2].iY,
-			// visitedCities[3].iId, visitedCities[3].iX, visitedCities[3].iY,
-			// visitedCities[4].iId, visitedCities[4].iX, visitedCities[4].iY);
 	
 	printf("%d \n", iTotalDist);
 	
