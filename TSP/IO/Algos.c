@@ -23,7 +23,7 @@ int getDistance(struct structCity A, struct structCity B){
 }
 
 
-int NearestNeightbor(struct structCity *cityList,struct structCity *visitedCities, int size,int start){
+int NearestNeighbor(struct structCity *cityList,struct structCity *visitedCities, int size,int start){
     int counter=0;
     int totalDistance=0;
 
@@ -78,7 +78,7 @@ int resultTSP(struct structCity *input, int *output, int size)
     struct structCity visitedCities[size];
     //TODO zero out visitedCities
     int start=0;
-    int totalDistance=NearestNeightbor(input,visitedCities,size,start);
+    int totalDistance=NearestNeighbor(input,visitedCities,size,start);
     if (totalDistance==-1){
         start++;
         NearestNeighbor(input,visitedCities,size,start);
