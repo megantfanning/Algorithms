@@ -1,0 +1,20 @@
+Project Description:
+
+The traveling salesman problem involves finding the path with the shortest distance for a graph. 
+The path can start at any node and must visit all nodes and return to the starting node with 
+the shortest path. No poly-time solution has been discovered for this problem so only 
+approximations will be used in this program.
+
+File Descriptions:
+
+Main.c - program entry 
+StructDef.h - struct definition header file
+UserInt.h/c - file IO and other user interface generic functions
+Algos.h/c - primary TSP solver algorithms 
+
+Instructions:
+
+1) 	Build the project by entering "make" in directory with project files and makefile.
+2) 	Enter TSP filename where filename is the file with the input data. 
+3) 	The results are stored in file named filename.tour where filename is the entire 
+	file name of the input file.
