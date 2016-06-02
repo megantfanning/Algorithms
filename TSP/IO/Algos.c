@@ -11,7 +11,8 @@
 #include "Algos.h"
 
 //get the distance between two cities
-int getDistance(struct structCity A, struct structCity B){
+int getDistance(struct structCity A, struct structCity B)
+{
     //get distance between two cities
     int x=A.iX-B.iX;//subtract x coordinates
     int y=A.iY-B.iY;//subtract y coordinates
@@ -22,54 +23,81 @@ int getDistance(struct structCity A, struct structCity B){
     return myDistance;
 }
 
-
-int NearestNeighbor(struct structCity *cityList,struct structCity *visitedCities, int size,int start){
-    int counter=0;
-    int totalDistance=0;
-
-    //start on an arbitrary vertex as current vertex.
-    visitedCities[counter]=cityList[start];
-    counter++;
-    struct structCity currentCity=cityList[0];//first vertex
-    int minimumDistance=-999;
-    int distance=-999;
-
-    //if all the vertices in domain are visited, then terminate.
-    while(counter<size){
-        //find out the shortest edge connecting current vertex 
-        //and an unvisited vertex V (the closest neighbor.
-        //set current vertex to V.
-        struct structCity V;
-
-        for(int i=0; i<size;i++){
-            //don't check distance of city against itself
-            if(currentCity.iId != cityList[i].iId){
-                //get the distance between city & neighbor
-                distance=getDistance(currentCity, cityList[i]);
-                printf("A:%d dist:%d, \n",cityList[i].iId,distance);//TODO temp
-            
-                if(distance<minimumDistance){
-                    //check if cityList[i] has been visited
-                    for(int j=0;j<counter;j++){
-                        if(cityList[i].iId == visitedCities[j].iId){
-                            //city have been visited.
-                            return -1;//return error.
-                        }
-                    }
-                    minimumDistance=distance;
-                    V=cityList[i];
-                }
-            }
-        } 
-        //mark V as visited, incriment counter
-        visitedCities[counter]=V;
-        printf("%d: city visited: %d \n",counter, visitedCities[counter].iId);//TODO temp
-        totalDistance=minimumDistance;
-        counter++;
-        currentCity=V;
-    }
+// Get the distance from an origin city to the nearest city. Return the min distance.
+int NearestNeighbor(struct structCity *cityList, 
+		struct structCity *visitedCities, int size, int start){
     
-    return totalDistance;
+	// Local declares 
+	int iCurDist = -999; // Holder for the current distance 
+	int iShortDist = -999; // Holder for the min distance 
+	int iFlag = -999; // Flag for same city or in the visited list
+	int iCurCityId = -999; // Holder for the index of the current closest city
+	int i = 0; // Shared indexer
+
+	// Loop over the city list and find the shortest distance 
+	for(i = 0; i < size; i++)
+	{
+		// Init the flag 
+		iFlag = -999;
+		
+		//printf("at the start %d %d\n", i, start);
+		
+		// Check if the ith element is the start element 
+		if(i == start)
+		{
+			iFlag = 1;
+		}
+		
+		// Only execute if the flag has not been set 
+		if(iFlag != 1)
+		{
+			// Check if ith element is in visitedCities
+			for(int j = 1; j < visitedCities[0].iId; j++)
+			{
+				if(cityList[i].iId == visitedCities[j].iId)
+				{
+					iFlag = 1;
+					break;
+				}
+			}
+		}
+		
+		// Only execute if flag has not been set meaning 
+		// we have the same vertex for start and end or the 
+		// vertex is already in the finished pile 
+		if(iFlag != 1)
+		{
+			// Now get the distance for the ith city 
+			iCurDist = getDistance(cityList[start], cityList[i]);
+			//printf("Cur dist %d %d\n", i, iCurDist);
+			
+			// Init the distances for first time through
+			if(iShortDist < 0)
+			{
+				iShortDist = iCurDist;
+				iCurCityId = i;
+				//printf("Short init %d \n", iShortDist);
+			}
+			
+			// Check if current distance is less than min distance 
+			if((iShortDist > 0 && iCurDist > 0) & (iCurDist < iShortDist))
+			{
+				iShortDist = iCurDist;
+				iCurCityId = i;
+			}
+		}
+	}
+	
+	// Put the closest city into visited
+	visitedCities[visitedCities[0].iId + 1] = cityList[iCurCityId];
+	
+	// Increment the size of visitedCities
+	visitedCities[0].iId = visitedCities[0].iId + 1;
+	
+	// printf("%d \n ", iShortDist);
+	
+	// Return the min distance
+	return iShortDist;
 }
 
 // Algorithm to get the shortest round trip for the 
@@ -80,33 +108,48 @@ int NearestNeighbor(struct structCity *cityList,struct structCity *visitedCities
 // size parameter is the number of cities.
 int resultTSP(struct structCity *input, int *output, int size)
 {
-    //create an array for visited cities
-    struct structCity visitedCities[size];
-    //TODO zero out visitedCities
-    //memset(visitedCities, 0, sizeof(visitedCities));
-
-    int start=0;
-    int totalDistance=NearestNeighbor(input,visitedCities,size,start);
-    if (totalDistance==-1){
-        start++;
-        NearestNeighbor(input,visitedCities,size,start);
-    }
-    //printf("totalDistance %d",totalDistance);
-
-	// Dummy populate the result array 
-	for(int i = 0; i < size + 1; i++)
+	// Local declares
+	int iStartNode = 0; // Starting node 
+	struct structCity visitedCities[size + 1]; // Put the size in the first index
+	int iTotalDist = -999; // Total distance traveled
+	int i = -999; // Global indexer
+	
+	// Set the size of visitedCities 
+	visitedCities[0].iId = 1;
+	visitedCities[0].iX = -999;
+	visitedCities[0].iY = -999;
+	
+	// Add the initial city to the first index of visited cities 
+	visitedCities[1] = input[iStartNode];
+	
+	// Get the nearest neighbor for the first time through
+	iTotalDist = NearestNeighbor(input, visitedCities, size, iStartNode);
+	
+	// Now loop through the rest of the input list 
+	while(visitedCities[0].iId < size)
 	{
-        //printf("%d, ",visitedCities[i].iId);
-        
-		/*if(i == 0)
-		{
-			output[0] = 78932;
-		}
-		else 
-		{
-			output[i] = input[i - 1].iY;
-		}*/
+		iTotalDist = iTotalDist + NearestNeighbor(input, visitedCities, size, 
+					visitedCities[visitedCities[0].iId].iId);
+	}
+
+	// printf("%d %d %d\n %d %d %d\n %d %d %d\n %d %d %d\n %d %d %d \n", 
+			// visitedCities[0].iId, visitedCities[0].iX, visitedCities[0].iY,
+			// visitedCities[1].iId, visitedCities[1].iX, visitedCities[1].iY,
+			// visitedCities[2].iId, visitedCities[2].iX, visitedCities[2].iY,
+			// visitedCities[3].iId, visitedCities[3].iX, visitedCities[3].iY,
+			// visitedCities[4].iId, visitedCities[4].iX, visitedCities[4].iY);
+	
+	printf("%d \n", iTotalDist);
+	
+	// Move the visited cities to the output
+	for(i = 1; i < size + 1; i++)
+	{
+		output[i] = visitedCities[i].iId;
 	}
 	
+	// Move the total distance traveled to index 0 in the output list
+	output[0] = iTotalDist;
+	
+	// Bounce 
 	return 0;
 }
