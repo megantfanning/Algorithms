@@ -42,22 +42,28 @@ int NearestNeighbor(struct structCity *cityList,struct structCity *visitedCities
         struct structCity V;
 
         for(int i=0; i<size;i++){
-            //get the distance between city & neighbor
-            distance=getDistance(currentCity, cityList[i]);
-            if(distance<minimumDistance){
-                //check if cityList[i] has been visited
-                for(int j=0;j<counter;j++){
-                    if(cityList[i].iId == visitedCities[j].iId){
-                        //city have been visited.
-                        return -1;//return error.
+            //don't check distance of city against itself
+            if(currentCity.iId != cityList[i].iId){
+                //get the distance between city & neighbor
+                distance=getDistance(currentCity, cityList[i]);
+                printf("A:%d dist:%d, \n",cityList[i].iId,distance);//TODO temp
+            
+                if(distance<minimumDistance){
+                    //check if cityList[i] has been visited
+                    for(int j=0;j<counter;j++){
+                        if(cityList[i].iId == visitedCities[j].iId){
+                            //city have been visited.
+                            return -1;//return error.
+                        }
                     }
+                    minimumDistance=distance;
+                    V=cityList[i];
                 }
-                minimumDistance=distance;
-                V=cityList[i];
             }
         } 
         //mark V as visited, incriment counter
         visitedCities[counter]=V;
+        printf("%d: city visited: %d \n",counter, visitedCities[counter].iId);//TODO temp
         totalDistance=minimumDistance;
         counter++;
         currentCity=V;
@@ -77,18 +83,20 @@ int resultTSP(struct structCity *input, int *output, int size)
     //create an array for visited cities
     struct structCity visitedCities[size];
     //TODO zero out visitedCities
+    //memset(visitedCities, 0, sizeof(visitedCities));
+
     int start=0;
     int totalDistance=NearestNeighbor(input,visitedCities,size,start);
     if (totalDistance==-1){
         start++;
         NearestNeighbor(input,visitedCities,size,start);
     }
-    printf("totalDistance %d",totalDistance);
+    //printf("totalDistance %d",totalDistance);
 
 	// Dummy populate the result array 
 	for(int i = 0; i < size + 1; i++)
 	{
-        printf("%d, ",visitedCities[i].iId);
+        //printf("%d, ",visitedCities[i].iId);
         
 		/*if(i == 0)
 		{
