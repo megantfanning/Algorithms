@@ -5,8 +5,10 @@
 // Authors:			Ian Dalrymple, Megan Fanning, Toni York
 // Date: 			05/28/2016
 /* ------------------------------------------------------------------------- */
-#include<math.h>
+#include <math.h>
+#include <stdio.h>
 #include "StructDef.h"
+ 
 
 #ifndef ALGOS_INCLUDED
 #define ALGOS_INCLUDED 1

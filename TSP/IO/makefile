@@ -1,7 +1,7 @@
 default: TSP
 
 Algos.o: Algos.c Algos.h 
-	gcc -Wall -std=c99 -c Algos.c		
+	gcc -Wall -std=c99 -c -lm Algos.c		
 	
 UserInt.o: UserInt.c UserInt.h 
 	gcc -Wall -std=c99 -c UserInt.c	
