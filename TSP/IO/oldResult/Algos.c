@@ -18,6 +18,7 @@ int getDistance(struct structCity A, struct structCity B)
     int y=A.iY-B.iY;//subtract y coordinates
     double dist=pow(y,2)+pow(x,2);// raise both to the power of two and add
     double distance=sqrt(dist);//sqrt of the sum of x^2+y^2
+    //note: use rint or nearby int for rounding
     int myDistance=nearbyint(distance);//round to nearest int
     return myDistance;
 }
@@ -38,6 +39,8 @@ int NearestNeighbor(struct structCity *cityList,
 	{
 		// Init the flag 
 		iFlag = -999;
+		
+		//printf("at the start %d %d\n", i, start);
 		
 		// Check if the ith element is the start element 
 		if(i == start)
@@ -66,12 +69,14 @@ int NearestNeighbor(struct structCity *cityList,
 		{
 			// Now get the distance for the ith city 
 			iCurDist = getDistance(cityList[start], cityList[i]);
-
+			//printf("Cur dist %d %d\n", i, iCurDist);
+			
 			// Init the distances for first time through
 			if(iShortDist < 0)
 			{
 				iShortDist = iCurDist;
 				iCurCityId = i;
+				//printf("Short init %d \n", iShortDist);
 			}
 			
 			// Check if current distance is less than min distance 
@@ -89,6 +94,8 @@ int NearestNeighbor(struct structCity *cityList,
 	// Increment the size of visitedCities
 	visitedCities[0].iId = visitedCities[0].iId + 1;
 	
+	// printf("%d \n ", iShortDist);
+	
 	// Return the min distance
 	return iShortDist;
 }
@@ -103,7 +110,7 @@ int resultTSP(struct structCity *input, int *output, int size)
 {
 	// Local declares
 	int iStartNode = 0; // Starting node 
-	struct structCity visitedCities[size + 1]; // Put the size in the first index
+	struct structCity visitedCities[size + 1]; //Put the size in the first index
 	int iTotalDist = -999; // Total distance traveled
 	int i = -999; // Global indexer
 	
@@ -124,7 +131,9 @@ int resultTSP(struct structCity *input, int *output, int size)
 		iTotalDist = iTotalDist + NearestNeighbor(input, visitedCities, size, 
 					visitedCities[visitedCities[0].iId].iId);
 	}
-
+	
+	printf("%d \n", iTotalDist);
+	
 	// Move the visited cities to the output
 	for(i = 1; i < size + 1; i++)
 	{

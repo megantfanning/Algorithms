@@ -86,17 +86,11 @@ int main (int argc, const char * argv[])
 	// Push the output array to output file
 	iResults = outputFile(outFile, outputList, iSize + 1);
 	
-	// Conditional iResults 
-	if(iResults == 0)
-	{
-		iResults = 9;
-	}
-	
 	// Get the running time 
 	timer = clock() - timer;
 	
 	// Print the running time and bounce
-	printf("Whole program ran in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
+	printf("\nWhole program ran in %f seconds\n\n", (float)timer / (float)CLOCKS_PER_SEC);
 	
 	// Free up memory 
 	free(inputList);
