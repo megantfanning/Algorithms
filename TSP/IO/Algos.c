@@ -23,12 +23,12 @@ int getDistance(struct structCity A, struct structCity B){
 }
 
 
-int NearestNeightbor(struct structCity *cityList,struct structCity *visitedCities, int size){
+int NearestNeightbor(struct structCity *cityList,struct structCity *visitedCities, int size,int start){
     int counter=0;
     int totalDistance=0;
 
     //start on an arbitrary vertex as current vertex.
-    visitedCities[counter]=cityList[0];
+    visitedCities[counter]=cityList[start];
     counter++;
     struct structCity currentCity=cityList[0];//first vertex
 
@@ -77,8 +77,12 @@ int resultTSP(struct structCity *input, int *output, int size)
     //create an array for visited cities
     struct structCity visitedCities[size];
     //TODO zero out visitedCities
-    int totalDistance=NearestNeightbor(input,visitedCities,size);
-
+    int start=0;
+    int totalDistance=NearestNeightbor(input,visitedCities,size,start);
+    if (totalDistance==-1){
+        start++;
+        NearestNeighbor(input,visitedCities,size,start);
+    }
     printf("totalDistance %d",totalDistance);
 
 	// Dummy populate the result array 
