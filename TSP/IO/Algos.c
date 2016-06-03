@@ -129,7 +129,9 @@ int resultTSP(struct structCity *input, int *output, int size, int StartNode)
 	{
 		output[i] = visitedCities[i].iId;
 	}
-	
+    // add the distance from the last city to the first city;
+    int distToFinishLoop=getDistance(visitedCities[0],visitedCities[size]); 	
+    TotalDist+=distToFinishLoop;
 	// Move the total distance traveled to index 0 in the output list
 	output[0] = TotalDist;
 	
