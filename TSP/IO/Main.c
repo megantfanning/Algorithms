@@ -36,7 +36,7 @@ int main (int argc, const char * argv[])
 	struct structCity *inputList = NULL; // List of input data 
 	int *outputList = NULL; // Results array 
 	int iResults = -99; // Global reusable results indicator
-	int iSize = -99; // Number of cities 
+	int rowSize = -99; // Number of cities 
 
 	// The argument from the command line is the file to be 
 	// parsed and contains the city id followed by the coords (x, y)
@@ -56,20 +56,20 @@ int main (int argc, const char * argv[])
 	}
 	
 	// Get the number of rows in the file
-	iSize = fRowCount(rawFile);
+	rowSize = fRowCount(rawFile);
 
 	// Spin up the input array that will house the raw data from
 	// the file directly 
-	inputList = malloc(iSize * sizeof(*inputList));
+	inputList = malloc(rowSize * sizeof(*inputList));
 
 	// Spin up the output array that will house the results. 
 	// This array can be used to output to file as required. 
 	// The array contains one extra row for the total distance
 	// travelled which is the first row.
-	outputList = malloc((iSize + 1) * sizeof(*outputList));
+	outputList = malloc((rowSize + 1) * sizeof(*outputList));
 	
 	// Get the raw data into the input array 
-	iResults = fileToAr(rawFile, inputList, iSize);
+	iResults = fileToAr(rawFile, inputList, rowSize);
 	
 	// Reset the global integer return
 	iResults = -99;
@@ -78,14 +78,15 @@ int main (int argc, const char * argv[])
 	timer = clock();
 	
 	// Call the algorithmic solver function start with 0
-	iResults = resultTSP(inputList, outputList, iSize,0);
+	iResults = resultTSP(inputList, outputList, rowSize,0);
     //TODO check here for comparison	
+    //tourComparsion(int *output,int length){
 
 	// Reset the results integer
 	iResults = -99;
 	
 	// Push the output array to output file
-	iResults = outputFile(outFile, outputList, iSize + 1);
+	iResults = outputFile(outFile, outputList, rowSize + 1);
 	
 	// Conditional iResults 
 	if(iResults == 0)
