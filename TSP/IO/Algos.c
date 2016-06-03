@@ -99,12 +99,11 @@ int NearestNeighbor(struct structCity *cityList,
 // being the total distance and then the subsequent rows 
 // being the cities in the order they are to be visited, The 
 // size parameter is the number of cities.
-int resultTSP(struct structCity *input, int *output, int size)
+int resultTSP(struct structCity *input, int *output, int size, int StartNode)
 {
 	// Local declares
-	int iStartNode = 0; // Starting node 
 	struct structCity visitedCities[size + 1]; // Put the size in the first index
-	int iTotalDist = -999; // Total distance traveled
+	int TotalDist = -999; // Total distance traveled
 	int i = -999; // Global indexer
 	
 	// Set the size of visitedCities 
@@ -113,15 +112,15 @@ int resultTSP(struct structCity *input, int *output, int size)
 	visitedCities[0].iY = -999;
 	
 	// Add the initial city to the first index of visited cities 
-	visitedCities[1] = input[iStartNode];
+	visitedCities[1] = input[StartNode];
 	
 	// Get the nearest neighbor for the first time through
-	iTotalDist = NearestNeighbor(input, visitedCities, size, iStartNode);
+	TotalDist = NearestNeighbor(input, visitedCities, size, StartNode);
 	
 	// Now loop through the rest of the input list 
 	while(visitedCities[0].iId < size)
 	{
-		iTotalDist = iTotalDist + NearestNeighbor(input, visitedCities, size, 
+		TotalDist = TotalDist + NearestNeighbor(input, visitedCities, size, 
 					visitedCities[visitedCities[0].iId].iId);
 	}
 
@@ -132,8 +131,29 @@ int resultTSP(struct structCity *input, int *output, int size)
 	}
 	
 	// Move the total distance traveled to index 0 in the output list
-	output[0] = iTotalDist;
+	output[0] = TotalDist;
 	
 	// Bounce 
 	return 0;
+}
+
+//compare the distance between the first and last distance
+int tourComparion(int *output,int length){
+    int startDistance=0;
+    int endDistance=0;
+    //sum the first 5 distances
+    for(int i=0;i<5;i++){
+        startDistance=output[i];
+    }
+    //sum the last 5 distances
+    for(int j=length;j<length-5;j--){
+        endDistance=output[length];
+    }
+    //compare
+    int averageDistance=endDistance+startDistance/2;
+    //if last 5 is significantly greater then call resultTSP again
+    if(endDistance>averageDistance){
+        return 1;
+    }
+    return 0;
 }
