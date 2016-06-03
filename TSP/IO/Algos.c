@@ -147,13 +147,14 @@ int tourComparion(int *output,int length){
         startDistance=output[i];
     }
     //sum the last 5 distances
-    for(int j=length;j<length-5;j--){
+    for(int j=length;j<length-5;j--){       //StartNode=5;//use 5 so we have a significantly different start
+        //resultTSP(input,output, size,StartNode);
+
         endDistance=output[length];
     }
     //compare
-    int averageDistance=endDistance+startDistance/2;
     //if last 5 is significantly greater then call resultTSP again
-    if(endDistance>averageDistance){
+    if(endDistance>(1.2*startDistance)){
         return 1;
     }
     return 0;
