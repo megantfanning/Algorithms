@@ -34,7 +34,8 @@ int main (int argc, const char * argv[])
 	const char* rawFile; // Input file name handler
 	char outFile[512];  // Output file name 
 	struct structCity *inputList = NULL; // List of input data 
-	int *outputList = NULL; // Results array 
+	int *outputList1 = NULL; // Results array 
+	int *outputList2 = NULL; // Results array 
 	int iResults = -99; // Global reusable results indicator
 	int rowSize = -99; // Number of cities 
 	int emptyCounter = 0; // Rows that are empty
@@ -73,8 +74,9 @@ int main (int argc, const char * argv[])
 	// This array can be used to output to file as required. 
 	// The array contains one extra row for the total distance
 	// travelled which is the first row.
-	outputList = malloc((rowSize + 1) * sizeof(*outputList));
-	
+	outputList1 = malloc((rowSize + 1) * sizeof(*outputList1));
+    outputList2 = malloc((rowSize + 1) * sizeof(*outputList2));
+
 	// Get the raw data into the input array 
 	iResults = fileToAr(rawFile, inputList, rowSize);
 	
@@ -101,9 +103,25 @@ int main (int argc, const char * argv[])
 	// Start the clock 
 	timer = clock();
 	
-	// Call the algorithmic solver function start with 0
-	iResults = resultTSP(inputList, outputList, rowSize,0);
-	
+    //generate two sets of results and compare
+    resultTSP(inputList, outputList1, rowSize,0);
+
+    int start=10;
+    int better=1;
+    for(int i=1;i<10;i++){
+        if(better==1){
+            resultTSP(inputList, outputList2, rowSize,start);
+        }else{
+            resultTSP(inputList, outputList1, rowSize,start);
+        }
+        start=+5;
+        
+        if(outputList1[0]>outputList2[0]){
+            better=2;
+        }else{
+            better=1;
+        }
+    }    
 	// Get the running time 
 	timer = clock() - timer;
 	
@@ -111,7 +129,11 @@ int main (int argc, const char * argv[])
 	iResults = -99;
 	
 	// Push the output array to output file
-	iResults = outputFile(outFile, outputList, rowSize + 1);
+    if(better==1){
+	    iResults = outputFile(outFile, outputList1, rowSize + 1);
+    }else{
+	    iResults = outputFile(outFile, outputList2, rowSize + 1);
+    }
 	
 	// Conditional iResults 
 	if(iResults == 0)
@@ -124,7 +146,8 @@ int main (int argc, const char * argv[])
 	
 	// Free up memory 
 	free(inputList);
-	free(outputList);
+	free(outputList1);
+	free(outputList2);
 
 	// Return to OS
 	return 0;

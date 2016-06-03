@@ -22,6 +22,6 @@
 int resultTSP(struct structCity *input, int *output, int size, int startNode);
 int NearestNeighbor(struct structCity *cityList,struct structCity *visitedCities, int size,int start);
 int getDistance(struct structCity A, struct structCity B);
-
+int tourComparsion(int *output,int length);
 
 #endif
