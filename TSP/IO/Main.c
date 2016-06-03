@@ -77,9 +77,10 @@ int main (int argc, const char * argv[])
 	// Start the clock 
 	timer = clock();
 	
-	// Call the algorithmic solver function
-	iResults = resultTSP(inputList, outputList, iSize);
-	
+	// Call the algorithmic solver function start with 0
+	iResults = resultTSP(inputList, outputList, iSize,0);
+    //TODO check here for comparison	
+
 	// Reset the results integer
 	iResults = -99;
 	
