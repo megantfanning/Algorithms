@@ -108,13 +108,13 @@ int main (int argc, const char * argv[])
 
     int start=10;
     int better=1;
-    for(int i=1;i<10;i++){
+    for(int i=1;i<70;i++){
         if(better==1){
             resultTSP(inputList, outputList2, rowSize,start);
         }else{
             resultTSP(inputList, outputList1, rowSize,start);
         }
-        start=+5;
+        start+=1;
         
         if(outputList1[0]>outputList2[0]){
             better=2;
