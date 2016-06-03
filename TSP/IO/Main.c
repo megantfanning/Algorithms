@@ -37,6 +37,7 @@ int main (int argc, const char * argv[])
 	int *outputList = NULL; // Results array 
 	int iResults = -99; // Global reusable results indicator
 	int rowSize = -99; // Number of cities 
+	int emptyCounter = 0; // Rows that are empty
 
 	// The argument from the command line is the file to be 
 	// parsed and contains the city id followed by the coords (x, y)
@@ -61,6 +62,12 @@ int main (int argc, const char * argv[])
 	// Spin up the input array that will house the raw data from
 	// the file directly 
 	inputList = malloc(rowSize * sizeof(*inputList));
+	
+	// Init the inputlist 
+	for(int i = 0; i < rowSize; i++)
+	{
+		inputList[i].iId = -99;
+	}
 
 	// Spin up the output array that will house the results. 
 	// This array can be used to output to file as required. 
@@ -71,6 +78,23 @@ int main (int argc, const char * argv[])
 	// Get the raw data into the input array 
 	iResults = fileToAr(rawFile, inputList, rowSize);
 	
+	// Check the total number of data in the input array and 
+	// adjust the row count accordingly
+	for(int i = rowSize - 1; i >= 0; i--)
+	{
+		if(inputList[i].iId != i)
+		{
+			emptyCounter++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	// Adjust the row size 
+	rowSize = rowSize - emptyCounter;
+
 	// Reset the global integer return
 	iResults = -99;
 	
@@ -79,9 +103,10 @@ int main (int argc, const char * argv[])
 	
 	// Call the algorithmic solver function start with 0
 	iResults = resultTSP(inputList, outputList, rowSize,0);
-    //TODO check here for comparison	
-    //tourComparsion(int *output,int length){
-
+	
+	// Get the running time 
+	timer = clock() - timer;
+	
 	// Reset the results integer
 	iResults = -99;
 	
@@ -93,9 +118,6 @@ int main (int argc, const char * argv[])
 	{
 		iResults = 9;
 	}
-	
-	// Get the running time 
-	timer = clock() - timer;
 	
 	// Print the running time and bounce
 	printf("Whole program ran in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
