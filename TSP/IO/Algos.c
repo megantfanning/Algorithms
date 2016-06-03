@@ -138,6 +138,7 @@ int resultTSP(struct structCity *input, int *output, int size, int StartNode)
 }
 
 //compare the distance between the first and last distance
+//1 need to run again 0 okay run time
 int tourComparion(int *output,int length){
     int startDistance=0;
     int endDistance=0;
