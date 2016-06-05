@@ -1,4 +1,4 @@
-# AlgorithmsCS325
+# Algorithms CS325 OSU
 Class work for Algorithms class
 Project 1: Maximum subarray problem with divide and conquer and recursion.
 Project 2: Make Change with greedy algorithms and dynamic programing
